@@ -12,6 +12,7 @@
     background-color: #090A0F;
     color: #E5E7EB;
     font-family: var(--font-sans);
+    overflow-x: clip;
   }
 }
 
@@ -69,6 +70,27 @@
   .critical-reticle-blink {
     animation: none;
   }
+}
+
+/* Touch-friendly precision range slider thumbs */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: #2B7FFF;
+  border: 1px solid #E5E7EB;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: #2B7FFF;
+  border: 1px solid #E5E7EB;
+  cursor: pointer;
 }
 
 /* Precision flight-deck scrollbar */

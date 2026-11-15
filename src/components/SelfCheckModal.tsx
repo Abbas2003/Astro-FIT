@@ -281,7 +281,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 p-0 sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="self-check-modal-title"
@@ -289,20 +289,20 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-[6px] border border-[#232734] bg-[#11131A] text-[#E5E7EB]"
+        className="flex max-h-[92vh] sm:max-h-[90vh] w-full max-w-3xl flex-col rounded-t-[6px] sm:rounded-[6px] border border-[#232734] bg-[#11131A] text-[#E5E7EB]"
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between gap-4 border-b border-[#232734] px-6 py-4">
-          <div>
-            <div className="flight-micro-label">Crew Medical Input · Multi-Modal Capture</div>
-            <h2 id="self-check-modal-title" className="mt-0.5 text-base font-semibold text-white">
+        <div className="flex items-center justify-between gap-3 border-b border-[#232734] px-4 py-3 sm:px-6 sm:py-4">
+          <div className="min-w-0">
+            <div className="flight-micro-label truncate">Crew Medical Input · Multi-Modal Capture</div>
+            <h2 id="self-check-modal-title" className="mt-0.5 text-sm sm:text-base font-semibold text-white truncate">
               Biomedical Self-Check Logger
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-1.5 text-[#8E96AA] hover:border-[#2B7FFF] hover:text-white"
+            className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-1.5 text-[#8E96AA] hover:border-[#2B7FFF] hover:text-white shrink-0"
             aria-label="Close self-check modal"
           >
             <X className="h-4 w-4" />
@@ -310,11 +310,11 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
         </div>
 
         {/* Modal Tab Switcher */}
-        <div className="flex items-center gap-2 border-b border-[#232734] bg-[#0D0F15] px-6 py-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto border-b border-[#232734] bg-[#0D0F15] px-4 py-2.5 sm:px-6">
           <button
             type="button"
             onClick={() => setActiveTab('vitals')}
-            className={`inline-flex items-center gap-1.5 rounded-[4px] border px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap ${
+            className={`inline-flex items-center gap-1.5 rounded-[4px] border px-2.5 sm:px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
               activeTab === 'vitals'
                 ? 'border-[#2B7FFF] bg-[#2B7FFF]/15 text-white'
                 : 'border-[#232734] bg-[#11131A] text-[#8E96AA] hover:text-white'
@@ -326,7 +326,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('pvt')}
-            className={`inline-flex items-center gap-1.5 rounded-[4px] border px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap ${
+            className={`inline-flex items-center gap-1.5 rounded-[4px] border px-2.5 sm:px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
               activeTab === 'pvt'
                 ? 'border-[#2B7FFF] bg-[#2B7FFF]/15 text-white'
                 : 'border-[#232734] bg-[#11131A] text-[#8E96AA] hover:text-white'
@@ -338,7 +338,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('scan')}
-            className={`inline-flex items-center gap-1.5 rounded-[4px] border px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap ${
+            className={`inline-flex items-center gap-1.5 rounded-[4px] border px-2.5 sm:px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap shrink-0 ${
               activeTab === 'scan'
                 ? 'border-[#2B7FFF] bg-[#2B7FFF]/15 text-white'
                 : 'border-[#232734] bg-[#11131A] text-[#8E96AA] hover:text-white'
@@ -351,7 +351,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
 
         {/* Form Body */}
         <form onSubmit={(e) => void handleSubmit(e)} className="flex flex-1 flex-col overflow-hidden">
-          <div className="flex-1 overflow-y-auto px-6 py-5 bg-[#090A0F]">
+          <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5 bg-[#090A0F]">
             {activeTab === 'vitals' && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
@@ -366,13 +366,13 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                 ].map((field) => (
                   <div
                     key={field.key}
-                    className="rounded-[4px] border border-[#232734] bg-[#11131A] p-3.5"
+                    className="rounded-[4px] border border-[#232734] bg-[#11131A] p-3 sm:p-3.5"
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <label htmlFor={`modal-${field.key}`} className="flight-micro-label">
+                      <label htmlFor={`modal-${field.key}`} className="flight-micro-label truncate">
                         {field.label}
                       </label>
-                      <span className="font-mono-tabular text-sm font-semibold text-white">
+                      <span className="font-mono-tabular text-sm font-semibold text-white shrink-0">
                         {draft[field.key].toFixed(field.dec)} <span className="text-xs text-[#8E96AA]">{field.unit}</span>
                       </span>
                     </div>
@@ -389,7 +389,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                           [field.key]: Number(e.target.value),
                         }))
                       }
-                      className="mt-2.5 h-1 w-full cursor-pointer appearance-none rounded-[2px] bg-[#232734] accent-[#2B7FFF]"
+                      className="mt-2.5 h-2 sm:h-1.5 w-full cursor-pointer appearance-none rounded-[2px] bg-[#232734] accent-[#2B7FFF] touch-pan-y"
                     />
                   </div>
                 ))}
@@ -413,12 +413,12 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center justify-center rounded-[4px] border border-[#232734] bg-[#11131A] p-6">
+                <div className="flex flex-col items-center justify-center rounded-[4px] border border-[#232734] bg-[#11131A] p-4 sm:p-6">
                   {pvtPhase === 'idle' && (
                     <button
                       type="button"
                       onClick={startPvtTest}
-                      className="rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/15 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white hover:bg-[#2B7FFF]/25 transition-colors"
+                      className="w-full sm:w-auto rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/15 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white hover:bg-[#2B7FFF]/25 transition-colors"
                     >
                       Initiate 15-Second Reflex Test
                     </button>
@@ -428,7 +428,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                     <button
                       type="button"
                       onClick={handlePvtPadClick}
-                      className={`flex h-40 w-full max-w-md flex-col items-center justify-center rounded-[4px] border-2 font-mono-tabular text-sm font-bold tracking-wider transition-colors ${
+                      className={`flex h-40 sm:h-44 w-full max-w-md flex-col items-center justify-center rounded-[4px] border-2 font-mono-tabular text-sm font-bold tracking-wider transition-colors select-none touch-manipulation ${
                         pvtPhase === 'stimulus'
                           ? 'border-[#2B7FFF] bg-[#2B7FFF] text-white'
                           : 'border-[#232734] bg-[#0D0F15] text-[#8E96AA]'
@@ -444,7 +444,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                         <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                         <span>PVT-B ASSESSMENT COMPLETE</span>
                       </div>
-                      <div className="grid grid-cols-3 gap-2 font-mono-tabular text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono-tabular text-xs">
                         <div className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-2.5">
                           <div className="flight-micro-label">Mean Latency</div>
                           <div className="mt-1 text-base font-semibold text-white">
@@ -473,7 +473,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                       <button
                         type="button"
                         onClick={startPvtTest}
-                        className="rounded-[4px] border border-[#232734] bg-[#0D0F15] px-4 py-1.5 text-xs font-medium text-[#E5E7EB] hover:border-[#2B7FFF]"
+                        className="rounded-[4px] border border-[#232734] bg-[#0D0F15] px-4 py-2 text-xs font-medium text-[#E5E7EB] hover:border-[#2B7FFF]"
                       >
                         Re-run PVT-B Test
                       </button>
@@ -491,7 +491,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
 
             {activeTab === 'scan' && (
               <div className="space-y-4">
-                <div className="rounded-[4px] border border-[#232734] bg-[#11131A] p-4">
+                <div className="rounded-[4px] border border-[#232734] bg-[#11131A] p-3.5 sm:p-4">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <h3 className="text-sm font-semibold text-white">
@@ -518,12 +518,12 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                       <img
                         src={uploadedPreviewUrl}
                         alt="Uploaded diagnostic scan preview"
-                        className="h-16 w-20 rounded-[2px] object-cover border border-[#232734]"
+                        className="h-16 w-20 rounded-[2px] object-cover border border-[#232734] shrink-0"
                       />
-                      <div className="text-xs">
+                      <div className="text-xs min-w-0">
                         <div className="flex items-center gap-1.5 font-medium text-white">
-                          <FileImage className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
-                          <span>{uploadedImageName}</span>
+                          <FileImage className="h-3.5 w-3.5 text-[#2B7FFF] shrink-0" aria-hidden="true" />
+                          <span className="truncate">{uploadedImageName}</span>
                         </div>
                         <p className="mt-0.5 text-[#8E96AA]">
                           Scan attached. Confirm matching diagnostic ultrasound profile below.
@@ -555,7 +555,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                       >
                         <div className="flex items-center justify-between gap-2 text-[10px] font-mono-tabular">
                           <span className="text-[#8E96AA] truncate">{preset.scanLabel}</span>
-                          <span className={`font-semibold ${sevColor}`}>{preset.severity}</span>
+                          <span className={`font-semibold shrink-0 ${sevColor}`}>{preset.severity}</span>
                         </div>
                         <div className="mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-white">
                           <Activity className="h-3.5 w-3.5 text-[#2B7FFF] shrink-0" aria-hidden="true" />
@@ -587,26 +587,26 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
           </div>
 
           {/* Modal Footer */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#232734] bg-[#11131A] px-6 py-3.5">
-            <div className="font-mono-tabular text-[11px] text-[#8E96AA]">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-[#232734] bg-[#11131A] px-4 py-3 sm:px-6 sm:py-3.5">
+            <div className="font-mono-tabular text-[11px] text-[#8E96AA] truncate">
               {selectedPreset
                 ? `SCAN: ${selectedPreset.findingTitle}`
                 : calculatedCogScore !== null
                 ? `PVT-B COG SCORE: ${calculatedCogScore}/10`
                 : 'READY FOR INDEXEDDB COMMIT'}
             </div>
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-end gap-2.5 shrink-0">
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-[4px] border border-[#232734] bg-[#0D0F15] px-4 py-2 text-xs font-medium text-[#8E96AA] hover:text-white"
+                className="flex-1 sm:flex-initial rounded-[4px] border border-[#232734] bg-[#0D0F15] px-4 py-2 text-xs font-medium text-[#8E96AA] hover:text-white"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/20 px-4 py-2 text-xs font-semibold text-white hover:bg-[#2B7FFF]/30 disabled:opacity-50"
+                className="flex-1 sm:flex-initial rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/20 px-4 py-2 text-xs font-semibold text-white hover:bg-[#2B7FFF]/30 disabled:opacity-50"
               >
                 {submitting
                   ? 'UPDATING...'

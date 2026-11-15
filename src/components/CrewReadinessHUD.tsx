@@ -38,10 +38,10 @@ export const CrewReadinessHUD: React.FC<CrewReadinessHUDProps> = ({
       : { stroke: '#EF4444', text: 'text-[#EF4444]', border: 'border-[#EF4444]/60' };
 
   return (
-    <section className={`rounded-[6px] border ${scoreTone.border} bg-[#11131A] p-4`}>
+    <section className={`rounded-[6px] border ${scoreTone.border} bg-[#11131A] p-3.5 sm:p-4`}>
       {/* Readiness Score + Daily Health Streak Row */}
-      <div className="flex items-center justify-between gap-3 border-b border-[#232734] pb-3">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#232734] pb-3">
+        <div className="flex items-center gap-3 min-w-0">
           <div className="relative flex h-16 w-16 items-center justify-center shrink-0">
             <svg className="h-16 w-16 -rotate-90" viewBox="0 0 64 64" aria-hidden="true">
               <circle
@@ -70,9 +70,9 @@ export const CrewReadinessHUD: React.FC<CrewReadinessHUDProps> = ({
             </span>
           </div>
 
-          <div>
+          <div className="min-w-0">
             <div className="flight-micro-label">Mission Readiness</div>
-            <div className={`mt-0.5 text-base font-semibold ${scoreTone.text}`}>
+            <div className={`mt-0.5 text-base font-semibold ${scoreTone.text} truncate`}>
               {readiness.tierLabel}
             </div>
             <div className="font-mono-tabular text-[11px] text-[#8E96AA]">
@@ -82,7 +82,7 @@ export const CrewReadinessHUD: React.FC<CrewReadinessHUDProps> = ({
         </div>
 
         {/* Daily Health Streak Indicator */}
-        <div className="flex flex-col items-end text-right shrink-0">
+        <div className="flex flex-col items-start sm:items-end text-left sm:text-right shrink-0">
           <div className="inline-flex items-center gap-1 rounded-[4px] border border-[#232734] bg-[#0D0F15] px-2 py-1 font-mono-tabular text-xs font-semibold text-[#F59E0B]">
             <Flame className="h-3.5 w-3.5" aria-hidden="true" />
             <span>{streakDays}D STREAK</span>
@@ -95,7 +95,7 @@ export const CrewReadinessHUD: React.FC<CrewReadinessHUDProps> = ({
 
       {/* Interactive Daily Mission Routine Checklist */}
       <div className="mt-3">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 flight-micro-label">
             <ShieldCheck className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
             <span>Daily Mission Routine</span>

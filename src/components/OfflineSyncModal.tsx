@@ -52,7 +52,7 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 p-0 sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="offline-sync-title"
@@ -60,20 +60,20 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex max-h-[85vh] w-full max-w-2xl flex-col rounded-[6px] border border-[#232734] bg-[#11131A] text-[#E5E7EB]"
+        className="flex max-h-[90vh] sm:max-h-[85vh] w-full max-w-2xl flex-col rounded-t-[6px] sm:rounded-[6px] border border-[#232734] bg-[#11131A] text-[#E5E7EB]"
       >
         {/* Header */}
-        <div className="flex items-center justify-between gap-4 border-b border-[#232734] px-6 py-4">
-          <div>
-            <div className="flight-micro-label">IndexedDB Telemetry Buffer · DSN Link</div>
-            <h2 id="offline-sync-title" className="mt-0.5 text-base font-semibold text-white">
+        <div className="flex items-center justify-between gap-3 border-b border-[#232734] px-4 py-3 sm:px-6 sm:py-4">
+          <div className="min-w-0">
+            <div className="flight-micro-label truncate">IndexedDB Telemetry Buffer · DSN Link</div>
+            <h2 id="offline-sync-title" className="mt-0.5 text-sm sm:text-base font-semibold text-white truncate">
               Deep-Space Offline Store &amp; Sync Queue
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-1.5 text-[#8E96AA] hover:border-[#2B7FFF] hover:text-white"
+            className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-1.5 text-[#8E96AA] hover:border-[#2B7FFF] hover:text-white shrink-0"
             aria-label="Close offline sync modal"
           >
             <X className="h-4 w-4" />
@@ -81,15 +81,15 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
         </div>
 
         {/* Connectivity & Blackout Controls */}
-        <div className="border-b border-[#232734] bg-[#0D0F15] px-6 py-4 space-y-3">
+        <div className="border-b border-[#232734] bg-[#0D0F15] px-4 py-3 sm:px-6 sm:py-4 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 text-xs">
+            <div className="flex items-center gap-2 text-xs min-w-0">
               {isLinkAvailable ? (
-                <Satellite className="h-4 w-4 text-[#10B981]" aria-hidden="true" />
+                <Satellite className="h-4 w-4 text-[#10B981] shrink-0" aria-hidden="true" />
               ) : (
-                <CloudOff className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
+                <CloudOff className="h-4 w-4 text-[#F59E0B] shrink-0" aria-hidden="true" />
               )}
-              <span className="font-mono-tabular font-medium text-white">
+              <span className="font-mono-tabular font-medium text-white break-words">
                 {isLinkAvailable
                   ? 'DSN TELEMETRY LINK AVAILABLE'
                   : !browserOnline
@@ -101,7 +101,7 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
             <button
               type="button"
               onClick={onToggleSimulateBlackout}
-              className={`rounded-[4px] border px-3 py-1.5 text-xs font-mono-tabular font-medium transition-colors whitespace-nowrap shrink-0 ${
+              className={`w-full sm:w-auto rounded-[4px] border px-3 py-1.5 text-xs font-mono-tabular font-medium transition-colors whitespace-nowrap shrink-0 ${
                 simulateBlackout
                   ? 'border-[#F59E0B] bg-[#F59E0B]/15 text-[#F59E0B]'
                   : 'border-[#232734] bg-[#11131A] text-[#E5E7EB] hover:border-[#2B7FFF]'
@@ -111,7 +111,7 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
             </button>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-[#8E96AA]">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 text-xs text-[#8E96AA]">
             <div className="font-mono-tabular">
               QUEUED: <strong className="text-white">{pendingCount}</strong>
               <span className="mx-2 text-[#3B4254]">·</span>
@@ -124,12 +124,12 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-2 sm:flex items-center gap-2">
               <button
                 type="button"
                 onClick={handleExportBundle}
                 disabled={logs.length === 0}
-                className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#232734] bg-[#11131A] px-3 py-1.5 text-xs font-medium text-[#E5E7EB] hover:border-[#2B7FFF] disabled:opacity-40"
+                className="inline-flex items-center justify-center gap-1.5 rounded-[4px] border border-[#232734] bg-[#11131A] px-3 py-1.5 text-xs font-medium text-[#E5E7EB] hover:border-[#2B7FFF] disabled:opacity-40"
               >
                 <Download className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>Export JSON</span>
@@ -138,7 +138,7 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
                 type="button"
                 onClick={() => void onSyncNow()}
                 disabled={!isLinkAvailable || pendingCount === 0 || isSyncing}
-                className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/20 px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#2B7FFF]/30 disabled:opacity-40"
+                className="inline-flex items-center justify-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/20 px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#2B7FFF]/30 disabled:opacity-40"
               >
                 <RefreshCw
                   className={`h-3.5 w-3.5 text-[#2B7FFF] ${isSyncing ? 'animate-spin' : ''}`}
@@ -151,9 +151,9 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
         </div>
 
         {/* Log List */}
-        <div className="flex-1 overflow-y-auto bg-[#090A0F] px-6 py-4">
+        <div className="flex-1 overflow-y-auto bg-[#090A0F] px-4 py-4 sm:px-6">
           {logs.length === 0 ? (
-            <div className="rounded-[4px] border border-dashed border-[#232734] py-10 text-center text-xs text-[#8E96AA]">
+            <div className="rounded-[4px] border border-dashed border-[#232734] py-10 px-4 text-center text-xs text-[#8E96AA]">
               No telemetry checkpoints logged. Submit a vitals reading to inspect IndexedDB queueing.
             </div>
           ) : (
@@ -167,7 +167,7 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
                     className="rounded-[4px] border border-[#232734] bg-[#11131A] p-3 text-xs"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 font-mono-tabular text-[#8E96AA]">
+                      <div className="flex flex-wrap items-center gap-2 font-mono-tabular text-[#8E96AA]">
                         <span className="font-semibold text-white">
                           {new Date(entry.loggedAtIso).toLocaleString()}
                         </span>
@@ -182,11 +182,11 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
                         {isPending ? '▲ QUEUED OFFLINE' : '● SYNCED'}
                       </span>
                     </div>
-                    <div className="mt-1.5 font-mono-tabular text-[#E5E7EB]">
+                    <div className="mt-1.5 font-mono-tabular text-[#E5E7EB] break-words">
                       HR {entry.readings.heartRate} bpm · BP {entry.readings.systolicBP}/{entry.readings.diastolicBP} mmHg · RAD {entry.readings.cumulativeRadiation.toFixed(1)} mSv · SLEEP {entry.readings.sleepHours.toFixed(1)}h · COG {entry.readings.moodCognitiveScore.toFixed(1)}/10
                     </div>
                     {entry.notes && (
-                      <p className="mt-1 text-[#8E96AA]">{entry.notes}</p>
+                      <p className="mt-1 text-[#8E96AA] break-words">{entry.notes}</p>
                     )}
                   </div>
                 );

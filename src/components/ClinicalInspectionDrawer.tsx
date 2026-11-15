@@ -78,20 +78,20 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
         className="relative flex h-full w-full max-w-xl flex-col border-l border-[#232734] bg-[#090A0F] text-[#E5E7EB]"
       >
         {/* Drawer Header */}
-        <div className="flex items-start justify-between gap-4 border-b border-[#232734] bg-[#11131A] px-6 py-4">
+        <div className="flex items-start justify-between gap-3 border-b border-[#232734] bg-[#11131A] px-4 py-3.5 sm:px-6 sm:py-4">
           <div className="min-w-0">
-            <div className="flight-micro-label">
+            <div className="flight-micro-label truncate">
               {system.anatomicalRegionLabel} · {environment.shortName}
             </div>
-            <div className="mt-1 flex items-center gap-3">
+            <div className="mt-1 flex flex-wrap items-center gap-2 sm:gap-3">
               <h2
                 id="clinical-drawer-title"
-                className="text-lg font-semibold text-white"
+                className="text-base sm:text-lg font-semibold text-white"
               >
                 {system.displayName}
               </h2>
               <span
-                className={`inline-flex items-center gap-1 rounded-[4px] border px-2 py-0.5 font-mono-tabular text-[11px] font-semibold ${badge.border} ${badge.bg} ${badge.text}`}
+                className={`inline-flex items-center gap-1 rounded-[4px] border px-2 py-0.5 font-mono-tabular text-[11px] font-semibold shrink-0 ${badge.border} ${badge.bg} ${badge.text}`}
               >
                 {badge.glyph} {badge.label}
               </span>
@@ -101,7 +101,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
           <button
             type="button"
             onClick={onClose}
-            className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-2 text-[#8E96AA] transition-colors hover:border-[#2B7FFF] hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
+            className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-2 text-[#8E96AA] transition-colors hover:border-[#2B7FFF] hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] shrink-0"
             aria-label="Close clinical inspection drawer"
           >
             <X className="h-4 w-4" />
@@ -109,7 +109,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
         </div>
 
         {/* Scrollable Clinical Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
+        <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5 space-y-6">
           {/* Active Vitals for This System */}
           <section aria-labelledby="drawer-vitals-heading">
             <h3 id="drawer-vitals-heading" className="flight-micro-label">
@@ -128,7 +128,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="flight-micro-label">{bio.label}</span>
-                      <span className={`font-mono-tabular text-[10px] font-semibold ${bioStyle.text}`}>
+                      <span className={`font-mono-tabular text-[10px] font-semibold ${bioStyle.text} shrink-0`}>
                         {bioStyle.glyph} {bioStyle.label}
                       </span>
                     </div>
@@ -211,7 +211,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
             aria-labelledby="drawer-countermeasures-heading"
             className="border-t border-[#232734] pt-5"
           >
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-[#2B7FFF]" aria-hidden="true" />
                 <h3 id="drawer-countermeasures-heading" className="flight-micro-label">
@@ -229,14 +229,14 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
                 return (
                   <div
                     key={cm.id}
-                    className={`rounded-[4px] border p-4 transition-colors ${
+                    className={`rounded-[4px] border p-3.5 sm:p-4 transition-colors ${
                       isDone
                         ? 'border-[#10B981]/50 bg-[#10B981]/10'
                         : 'border-[#232734] bg-[#11131A]'
                     }`}
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+                      <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono-tabular">
                           <span
                             className={`rounded-[2px] border px-1.5 py-0.5 font-semibold ${
@@ -256,7 +256,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
                       <button
                         type="button"
                         onClick={() => onToggleCountermeasure(cm.id)}
-                        className={`inline-flex items-center gap-1.5 rounded-[4px] border px-2.5 py-1.5 text-xs font-mono-tabular font-medium transition-colors shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] ${
+                        className={`inline-flex items-center justify-center gap-1.5 rounded-[4px] border px-2.5 py-1.5 text-xs font-mono-tabular font-medium transition-colors shrink-0 self-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] ${
                           isDone
                             ? 'border-[#10B981] bg-[#10B981]/15 text-[#10B981]'
                             : 'border-[#232734] bg-[#0D0F15] text-[#E5E7EB] hover:border-[#2B7FFF]'

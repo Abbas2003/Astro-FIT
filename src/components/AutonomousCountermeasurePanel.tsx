@@ -83,17 +83,17 @@ export const AutonomousCountermeasurePanel: React.FC<
   return (
     <aside className="flex flex-col gap-4 h-full">
       {/* Overall Clinical Posture Module */}
-      <section className={`rounded-[6px] border ${overallStyle.border} bg-[#11131A] p-4`}>
-        <div className="flex items-center justify-between gap-2">
+      <section className={`rounded-[6px] border ${overallStyle.border} bg-[#11131A] p-3.5 sm:p-4`}>
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <span className="flight-micro-label">Crew Medical Posture</span>
           <span className={`font-mono-tabular text-[11px] font-semibold ${overallStyle.text}`}>
             {overallStyle.glyph} {overallStyle.label}
           </span>
         </div>
 
-        <div className="mt-2 flex items-center gap-2 text-xs text-[#E5E7EB]">
-          <Radio className="h-3.5 w-3.5 text-[#2B7FFF] shrink-0" aria-hidden="true" />
-          <span className="font-mono-tabular">{report.earthCommsStatusLabel}</span>
+        <div className="mt-2 flex items-start sm:items-center gap-2 text-xs text-[#E5E7EB]">
+          <Radio className="h-3.5 w-3.5 text-[#2B7FFF] shrink-0 mt-0.5 sm:mt-0" aria-hidden="true" />
+          <span className="font-mono-tabular break-words">{report.earthCommsStatusLabel}</span>
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-3 border-t border-[#232734] pt-3">
@@ -103,7 +103,7 @@ export const AutonomousCountermeasurePanel: React.FC<
               {report.environment.gravityLabel}
             </div>
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flight-micro-label">Cabin ECLSS</div>
             <div
               className="mt-0.5 font-mono-tabular text-xs font-medium text-white truncate"
@@ -116,7 +116,7 @@ export const AutonomousCountermeasurePanel: React.FC<
       </section>
 
       {/* NASA HRP 5 Hazards Exposure Matrix */}
-      <section className="rounded-[6px] border border-[#232734] bg-[#11131A] p-4">
+      <section className="rounded-[6px] border border-[#232734] bg-[#11131A] p-3.5 sm:p-4">
         <div className="flex items-center justify-between gap-2 border-b border-[#232734] pb-2.5">
           <div>
             <div className="flight-micro-label">Hazard Classification · HRP-5</div>
@@ -147,7 +147,7 @@ export const AutonomousCountermeasurePanel: React.FC<
       </section>
 
       {/* Prioritized Autonomous Countermeasures Queue */}
-      <section className="flex flex-1 flex-col rounded-[6px] border border-[#232734] bg-[#11131A] p-4 min-h-[260px]">
+      <section className="flex flex-1 flex-col rounded-[6px] border border-[#232734] bg-[#11131A] p-3.5 sm:p-4 min-h-[240px]">
         <div className="flex items-center justify-between gap-2 border-b border-[#232734] pb-2.5">
           <div>
             <div className="flight-micro-label">Autonomous Decision Engine</div>
@@ -161,7 +161,7 @@ export const AutonomousCountermeasurePanel: React.FC<
           </span>
         </div>
 
-        <div className="mt-3 flex-1 space-y-2 overflow-y-auto pr-1">
+        <div className="mt-3 flex-1 space-y-2 overflow-y-auto pr-0.5">
           {report.prioritizedCountermeasures.map((cm) => {
             const isDone = completedCountermeasures.includes(cm.id);
             const targetSystem: BodySystemId = cm.id.startsWith('nb-')
@@ -220,7 +220,7 @@ export const AutonomousCountermeasurePanel: React.FC<
                 <p className="mt-1 text-xs leading-relaxed text-[#8E96AA]">
                   {cm.instruction}
                 </p>
-                <div className="mt-2 flex items-center justify-between border-t border-[#232734] pt-2 font-mono-tabular text-[10px] text-[#8E96AA]">
+                <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-[#232734] pt-2 font-mono-tabular text-[10px] text-[#8E96AA]">
                   <span className="text-[#2B7FFF]">{cm.protocolCode}</span>
                   <span>{cm.targetDurationOrDose}</span>
                 </div>

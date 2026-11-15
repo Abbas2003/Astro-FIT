@@ -94,7 +94,7 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
   };
 
   return (
-    <aside className="flex flex-col rounded-[6px] border border-[#232734] bg-[#11131A] p-4 h-full">
+    <aside className="flex flex-col rounded-[6px] border border-[#232734] bg-[#11131A] p-3.5 sm:p-4 h-full">
       <div className="flex items-center justify-between gap-2 border-b border-[#232734] pb-3">
         <div>
           <div className="flight-micro-label">Sensor Channels · 9 Inputs</div>
@@ -109,7 +109,7 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
           <button
             type="button"
             onClick={onResetScenario}
-            className="inline-flex items-center gap-1 rounded-[4px] border border-[#232734] bg-[#0D0F15] px-2 py-1 text-[11px] font-mono-tabular text-[#8E96AA] hover:border-[#2B7FFF] hover:text-white whitespace-nowrap shrink-0"
+            className="inline-flex items-center gap-1 rounded-[4px] border border-[#232734] bg-[#0D0F15] px-2.5 py-1.5 sm:py-1 text-[11px] font-mono-tabular text-[#8E96AA] hover:border-[#2B7FFF] hover:text-white whitespace-nowrap shrink-0"
           >
             <RotateCcw className="h-3 w-3" aria-hidden="true" />
             <span>RESET</span>
@@ -118,7 +118,7 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
       </div>
 
       {/* Biomarker Sliders / Live Readouts */}
-      <div className="mt-3 flex-1 space-y-2 overflow-y-auto pr-1">
+      <div className="mt-3 flex-1 space-y-2">
         {SLIDER_SPECS.map((spec) => {
           const ev = evaluations[spec.key];
           const style = STATUS_STYLE[ev.status];
@@ -164,7 +164,7 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
                 value={val}
                 aria-label={`${ev.label} (${ev.unit})`}
                 onChange={(e) => onUpdateBiomarker(spec.key, Number(e.target.value))}
-                className="mt-1.5 h-1 w-full cursor-pointer appearance-none rounded-[2px] bg-[#232734] accent-[#2B7FFF]"
+                className="mt-2 h-2 sm:h-1.5 w-full cursor-pointer appearance-none rounded-[2px] bg-[#232734] accent-[#2B7FFF] touch-pan-y"
               />
             </div>
           );
@@ -182,12 +182,12 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
           onChange={(e) => setLogNotes(e.target.value)}
           placeholder="Crew annotation (e.g. Post-ARED / EVA)"
           aria-label="Crew telemetry log note"
-          className="w-full rounded-[4px] border border-[#232734] bg-[#090A0F] px-3 py-1.5 text-xs text-white placeholder:text-[#8E96AA]/60 focus:border-[#2B7FFF] focus:outline-none"
+          className="w-full rounded-[4px] border border-[#232734] bg-[#090A0F] px-3 py-2 sm:py-1.5 text-xs text-white placeholder:text-[#8E96AA]/60 focus:border-[#2B7FFF] focus:outline-none"
         />
         <button
           type="submit"
           disabled={saving}
-          className="flex w-full items-center justify-center gap-2 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/15 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#2B7FFF]/25 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
+          className="flex w-full items-center justify-center gap-2 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/15 px-4 py-2.5 sm:py-2 text-xs font-semibold text-white transition-colors hover:bg-[#2B7FFF]/25 disabled:opacity-60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
         >
           <Save className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
           <span>

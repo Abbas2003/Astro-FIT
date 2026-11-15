@@ -136,16 +136,16 @@ export const AnatomicalBodyMap: React.FC<AnatomicalBodyMapProps> = ({
     selectedSystem === id || hoveredSystem === id;
 
   return (
-    <div className="relative flex flex-col justify-between w-full h-full min-h-[500px] rounded-[6px] border border-[#232734] bg-[#11131A] p-4">
+    <div className="relative flex flex-col justify-between w-full h-full min-h-[420px] sm:min-h-[500px] rounded-[6px] border border-[#232734] bg-[#11131A] p-3.5 sm:p-4">
       {/* Header Bar */}
-      <div className="flex w-full items-center justify-between gap-4 border-b border-[#232734] pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#232734] pb-3">
         <div>
           <div className="flight-micro-label">Biomedical CAD Schematic · Anatomical Mapping</div>
           <h2 className="mt-0.5 text-sm font-semibold text-white">
             Physiological Telemetry Wireframe
           </h2>
         </div>
-        <div className="hidden sm:flex items-center gap-3 font-mono-tabular text-[11px]">
+        <div className="flex flex-wrap items-center gap-3 font-mono-tabular text-[10px] sm:text-[11px]">
           <span className="text-[#10B981]">● NOMINAL</span>
           <span className="text-[#F59E0B]">▲ CAUTION</span>
           <span className="text-[#EF4444]">✖ CRITICAL</span>
@@ -153,16 +153,16 @@ export const AnatomicalBodyMap: React.FC<AnatomicalBodyMapProps> = ({
       </div>
 
       {/* Central CAD Grid Stage */}
-      <div className="relative my-3 flex w-full flex-1 items-center justify-center min-h-[400px] rounded-[4px] border border-[#232734] cad-grid-bg overflow-hidden">
+      <div className="relative my-3 flex w-full flex-1 items-center justify-center min-h-[300px] sm:min-h-[390px] xl:min-h-[410px] rounded-[4px] border border-[#232734] cad-grid-bg overflow-hidden px-2 py-6 sm:py-4">
         {/* Corner Coordinate Markers */}
-        <div className="pointer-events-none absolute top-2 left-2.5 font-mono-tabular text-[10px] text-[#8E96AA]">
+        <div className="pointer-events-none absolute top-2 left-2.5 font-mono-tabular text-[9px] sm:text-[10px] text-[#8E96AA]">
           REF // ANAT-CAD-01
         </div>
-        <div className="pointer-events-none absolute top-2 right-2.5 font-mono-tabular text-[10px] text-[#8E96AA]">
+        <div className="pointer-events-none absolute top-2 right-2.5 font-mono-tabular text-[9px] sm:text-[10px] text-[#8E96AA]">
           AXIS: SAGITTAL +0.00
         </div>
 
-        {/* Desktop Floating System Telemetry Readouts */}
+        {/* Tablet & Desktop Floating System Telemetry Readouts */}
         <div className="pointer-events-none absolute inset-0 hidden sm:block">
           {HOTSPOT_CALLOUTS.map((node) => {
             const sys = systems[node.id];
@@ -179,7 +179,7 @@ export const AnatomicalBodyMap: React.FC<AnatomicalBodyMapProps> = ({
                 onMouseLeave={() => setHoveredSystem(null)}
                 className={`pointer-events-auto absolute ${node.anchorY} ${
                   node.side === 'left' ? 'left-2.5' : 'right-2.5'
-                } w-40 2xl:w-44 rounded-[4px] border px-2.5 py-2 text-left transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] ${
+                } w-36 md:w-44 xl:w-36 2xl:w-44 rounded-[4px] border px-2.5 py-2 text-left transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] ${
                   active
                     ? 'border-[#2B7FFF] bg-[#161A24]'
                     : 'border-[#232734] bg-[#11131A] hover:border-[#3B4254]'
@@ -210,7 +210,7 @@ export const AnatomicalBodyMap: React.FC<AnatomicalBodyMapProps> = ({
         {/* Precision Clinical CAD Vector Wireframe SVG */}
         <svg
           viewBox="0 0 360 540"
-          className="h-[380px] sm:h-[430px] w-auto max-w-full select-none"
+          className="h-[280px] sm:h-[380px] xl:h-[420px] w-auto max-w-full select-none"
           role="img"
           aria-label="Clinical anatomical CAD wireframe schematic"
         >
@@ -441,6 +441,7 @@ export const AnatomicalBodyMap: React.FC<AnatomicalBodyMapProps> = ({
             const spec = STATUS_SPEC[sys.status];
             const Icon = SYSTEM_ICONS[sysId];
             const active = selectedSystem === sysId;
+            const callout = HOTSPOT_CALLOUTS.find((h) => h.id === sysId);
             return (
               <button
                 key={sysId}
@@ -463,6 +464,11 @@ export const AnatomicalBodyMap: React.FC<AnatomicalBodyMapProps> = ({
                 <span className="mt-1 text-xs font-medium text-[#E5E7EB] truncate w-full">
                   {sys.displayName}
                 </span>
+                {callout && (
+                  <span className="mt-0.5 sm:hidden font-mono-tabular text-[10px] text-[#8E96AA] truncate w-full">
+                    {callout.keyMetricLabel(sys)}
+                  </span>
+                )}
               </button>
             );
           }

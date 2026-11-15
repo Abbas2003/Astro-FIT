@@ -319,58 +319,69 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#090A0F] text-[#E5E7EB] flex flex-col">
       {/* Operational Flight-Deck Console Header */}
-      <header className="sticky top-0 z-30 border-b border-[#232734] bg-[#0D0F15]">
+      <header className="md:sticky md:top-0 z-30 border-b border-[#232734] bg-[#0D0F15]">
         {/* Tier 1: Flight Console Telemetry Strip */}
         <div className="border-b border-[#232734] bg-[#090A0F]">
-          <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-2 sm:px-6">
+          <div className="mx-auto flex max-w-[1680px] flex-col gap-2.5 px-3 py-2.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
             {/* Brand + Flight Status */}
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="flex h-7 w-7 items-center justify-center rounded-[4px] border border-[#232734] bg-[#11131A] text-[#2B7FFF]">
-                <Activity className="h-4 w-4" aria-hidden="true" />
+            <div className="flex items-center justify-between gap-3 shrink-0">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex h-7 w-7 items-center justify-center rounded-[4px] border border-[#232734] bg-[#11131A] text-[#2B7FFF] shrink-0">
+                  <Activity className="h-4 w-4" aria-hidden="true" />
+                </div>
+                <div className="flex items-baseline gap-2 min-w-0">
+                  <span className="text-sm font-bold tracking-tight text-white whitespace-nowrap">
+                    Astro FIT
+                  </span>
+                  <span className="hidden sm:inline font-mono-tabular text-[10px] tracking-[0.08em] text-[#8E96AA] truncate">
+                    HRP BIOMEDICAL FLIGHT CONSOLE
+                  </span>
+                </div>
               </div>
-              <div className="flex items-baseline gap-2.5">
-                <span className="text-sm font-bold tracking-tight text-white whitespace-nowrap">
-                  Astro FIT
-                </span>
-                <span className="hidden sm:inline font-mono-tabular text-[10px] tracking-[0.08em] text-[#8E96AA]">
-                  HRP BIOMEDICAL FLIGHT CONSOLE
+
+              {/* Mobile quick posture pill */}
+              <div className="flex md:hidden items-center gap-2 font-mono-tabular text-[11px] font-semibold shrink-0">
+                <span className="text-white">{readinessSummary.score}% RDY</span>
+                <span className="inline-flex items-center gap-0.5 text-[#F59E0B]">
+                  <Flame className="h-3 w-3" aria-hidden="true" />
+                  {displayStreakDays}D
                 </span>
               </div>
             </div>
 
             {/* Flight-Deck Telemetry Strips (MET / Vehicle / Comms / Crew ID) */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5">
-              <div className="flex flex-col">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 sm:flex sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-1.5">
+              <div className="flex flex-col min-w-0">
                 <span className="flight-micro-label">Mission Elapsed Time</span>
-                <span className="font-mono-tabular text-xs font-semibold text-white">
+                <span className="font-mono-tabular text-[11px] sm:text-xs font-semibold text-white truncate">
                   {metDisplay}
                 </span>
               </div>
 
-              <div className="hidden sm:flex flex-col border-l border-[#232734] pl-4">
+              <div className="flex flex-col min-w-0 sm:border-l sm:border-[#232734] sm:pl-4">
                 <span className="flight-micro-label">Active Vehicle</span>
-                <span className="font-mono-tabular text-xs font-semibold text-[#E5E7EB]">
+                <span className="font-mono-tabular text-[11px] sm:text-xs font-semibold text-[#E5E7EB] truncate">
                   {consoleMeta.vehicleCallsign}
                 </span>
               </div>
 
-              <div className="flex flex-col border-l border-[#232734] pl-4">
+              <div className="flex flex-col min-w-0 sm:border-l sm:border-[#232734] sm:pl-4">
                 <span className="flight-micro-label">Comms Latency</span>
                 <span
-                  className={`inline-flex items-center gap-1.5 font-mono-tabular text-xs font-semibold ${
+                  className={`inline-flex items-center gap-1 font-mono-tabular text-[11px] sm:text-xs font-semibold truncate ${
                     activeEnvironment.autonomousModeRequired
                       ? 'text-[#F59E0B]'
                       : 'text-[#10B981]'
                   }`}
                 >
                   <Radio className="h-3 w-3 shrink-0" aria-hidden="true" />
-                  <span>{consoleMeta.commsLatencyLabel}</span>
+                  <span className="truncate">{consoleMeta.commsLatencyLabel}</span>
                 </span>
               </div>
 
-              <div className="hidden lg:flex flex-col border-l border-[#232734] pl-4">
+              <div className="flex flex-col min-w-0 sm:border-l sm:border-[#232734] sm:pl-4">
                 <span className="flight-micro-label">Crew Medical ID</span>
-                <span className="font-mono-tabular text-xs font-semibold text-[#E5E7EB]">
+                <span className="font-mono-tabular text-[11px] sm:text-xs font-semibold text-[#E5E7EB] truncate">
                   CDR. M. ABBAS // BIO-ID 04
                 </span>
               </div>
@@ -391,11 +402,11 @@ export default function App() {
 
         {/* Tier 2: Environment Matrix, Scenario Selector & Action Controls */}
         <div className="bg-[#11131A]">
-          <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-2.5 px-4 py-2 sm:px-6">
+          <div className="mx-auto flex max-w-[1680px] flex-col gap-2 px-3 py-2 sm:px-6 xl:flex-row xl:items-center xl:justify-between">
             {/* Environment Selector */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="hidden xl:inline flight-micro-label mr-1">Environment</span>
-              <div className="flex flex-wrap items-center gap-1 rounded-[4px] border border-[#232734] bg-[#090A0F] p-0.5">
+            <div className="flex items-center gap-2 w-full xl:w-auto">
+              <span className="hidden 2xl:inline flight-micro-label mr-1">Environment</span>
+              <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1 rounded-[4px] border border-[#232734] bg-[#090A0F] p-0.5 w-full sm:w-auto">
                 {(Object.keys(MISSION_ENVIRONMENTS) as MissionEnvironmentId[]).map((envKey) => {
                   const env = MISSION_ENVIRONMENTS[envKey];
                   const active = environmentId === envKey;
@@ -404,7 +415,7 @@ export default function App() {
                       key={envKey}
                       type="button"
                       onClick={() => setEnvironmentId(envKey)}
-                      className={`rounded-[4px] px-2.5 py-1 text-xs font-medium transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] ${
+                      className={`rounded-[4px] px-2.5 py-1.5 sm:py-1 text-xs font-medium transition-colors whitespace-nowrap shrink-0 text-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] ${
                         active
                           ? 'bg-[#2B7FFF]/20 text-white border border-[#2B7FFF]'
                           : 'text-[#8E96AA] hover:text-white border border-transparent'
@@ -418,7 +429,7 @@ export default function App() {
             </div>
 
             {/* Scenario Simulator + Action Controls */}
-            <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2 shrink-0 w-full xl:w-auto">
               <label htmlFor="scenario-select" className="sr-only">
                 Mission Scenario Simulator
               </label>
@@ -426,7 +437,7 @@ export default function App() {
                 id="scenario-select"
                 value={scenarioId}
                 onChange={(e) => handleSelectScenario(e.target.value as ScenarioId)}
-                className="max-w-[235px] rounded-[4px] border border-[#232734] bg-[#090A0F] px-2.5 py-1.5 font-mono-tabular text-xs font-medium text-[#E5E7EB] focus:border-[#2B7FFF] focus:outline-none"
+                className="w-full sm:w-auto sm:max-w-[235px] rounded-[4px] border border-[#232734] bg-[#090A0F] px-2.5 py-2 sm:py-1.5 font-mono-tabular text-xs font-medium text-[#E5E7EB] focus:border-[#2B7FFF] focus:outline-none"
               >
                 {(Object.keys(MISSION_SCENARIOS) as ScenarioId[]).map((id) => {
                   const sc = MISSION_SCENARIOS[id];
@@ -438,51 +449,53 @@ export default function App() {
                 })}
               </select>
 
-              <button
-                type="button"
-                onClick={() => setIsSelfCheckOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF] px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#1E6AE5] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
-              >
-                <ClipboardPlus className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>Log Vitals</span>
-              </button>
+              <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsSelfCheckOpen(true)}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF] px-3 py-2 sm:py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#1E6AE5] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
+                >
+                  <ClipboardPlus className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>Log Vitals</span>
+                </button>
 
-              <button
-                type="button"
-                onClick={() => setIsSurgeonOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#232734] bg-[#0D0F15] px-3 py-1.5 text-xs font-medium text-[#E5E7EB] transition-colors hover:border-[#2B7FFF] hover:text-white whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
-              >
-                <Bot className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
-                <span>Flight Surgeon</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setIsSurgeonOpen(true)}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-[4px] border border-[#232734] bg-[#0D0F15] px-3 py-2 sm:py-1.5 text-xs font-medium text-[#E5E7EB] transition-colors hover:border-[#2B7FFF] hover:text-white whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
+                >
+                  <Bot className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
+                  <span>Flight Surgeon</span>
+                </button>
 
-              <button
-                type="button"
-                onClick={() => setIsSyncModalOpen(true)}
-                className={`inline-flex items-center gap-1.5 rounded-[4px] border px-2.5 py-1.5 font-mono-tabular text-xs font-medium transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] ${
-                  !isLinkAvailable
-                    ? 'border-[#F59E0B] bg-[#F59E0B]/10 text-[#F59E0B]'
-                    : pendingCount > 0
-                    ? 'border-[#2B7FFF] bg-[#2B7FFF]/15 text-[#2B7FFF]'
-                    : 'border-[#232734] bg-[#0D0F15] text-[#E5E7EB] hover:border-[#2B7FFF]'
-                }`}
-                title="Inspect offline IndexedDB telemetry queue"
-              >
-                {isLinkAvailable ? (
-                  <Satellite className="h-3.5 w-3.5" aria-hidden="true" />
-                ) : (
-                  <CloudOff className="h-3.5 w-3.5" aria-hidden="true" />
-                )}
-                <span className="hidden sm:inline">
-                  {!isLinkAvailable
-                    ? `OFFLINE (${pendingCount})`
-                    : pendingCount > 0
-                    ? `SYNC (${pendingCount})`
-                    : 'DSN SYNCED'}
-                </span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setIsSyncModalOpen(true)}
+                  className={`inline-flex items-center justify-center gap-1.5 rounded-[4px] border px-2.5 py-2 sm:py-1.5 font-mono-tabular text-xs font-medium transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] ${
+                    !isLinkAvailable
+                      ? 'border-[#F59E0B] bg-[#F59E0B]/10 text-[#F59E0B]'
+                      : pendingCount > 0
+                      ? 'border-[#2B7FFF] bg-[#2B7FFF]/15 text-[#2B7FFF]'
+                      : 'border-[#232734] bg-[#0D0F15] text-[#E5E7EB] hover:border-[#2B7FFF]'
+                  }`}
+                  title="Inspect offline IndexedDB telemetry queue"
+                >
+                  {isLinkAvailable ? (
+                    <Satellite className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                  ) : (
+                    <CloudOff className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                  )}
+                  <span>
+                    {!isLinkAvailable
+                      ? `OFFLINE (${pendingCount})`
+                      : pendingCount > 0
+                      ? `SYNC (${pendingCount})`
+                      : 'DSN SYNCED'}
+                  </span>
+                </button>
 
-              <PWAInstallButton />
+                <PWAInstallButton />
+              </div>
             </div>
           </div>
         </div>
@@ -492,11 +505,11 @@ export default function App() {
       {!isLinkAvailable && (
         <div
           role="status"
-          className="border-b border-[#F59E0B]/50 bg-[#F59E0B]/10 px-4 py-2 text-xs text-[#F59E0B]"
+          className="border-b border-[#F59E0B]/50 bg-[#F59E0B]/10 px-3 py-2 text-xs text-[#F59E0B] sm:px-6"
         >
-          <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-2 sm:px-2">
-            <div className="flex items-center gap-2">
-              <WifiOff className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-2">
+            <div className="flex items-start sm:items-center gap-2">
+              <WifiOff className="h-3.5 w-3.5 shrink-0 mt-0.5 sm:mt-0" aria-hidden="true" />
               <span>
                 {!browserOnline
                   ? 'OFFLINE MODE ACTIVE — Onboard NASA HRP engine & Flight Surgeon cache operating autonomously. Vitals queue in IndexedDB.'
@@ -514,12 +527,12 @@ export default function App() {
         </div>
       )}
 
-      {/* Main 3-Column Flight-Deck Telemetry Workspace */}
-      <main className="mx-auto w-full max-w-[1680px] flex-1 px-4 py-4 sm:px-6">
+      {/* Main Responsive Telemetry Workspace: 1-col Mobile -> 2-col Tablet -> 3-col Desktop */}
+      <main className="mx-auto w-full max-w-[1680px] flex-1 px-3 py-4 sm:px-6">
         {/* Active Scenario Brief + Diagnostic Scan Status Strip */}
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-[6px] border border-[#232734] bg-[#11131A] px-4 py-3">
+        <div className="mb-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 rounded-[6px] border border-[#232734] bg-[#11131A] px-3.5 py-3 sm:px-4">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[#8E96AA]">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#8E96AA]">
               <span
                 className={`inline-flex items-center rounded-[4px] border px-1.5 py-0.5 font-mono-tabular text-[10px] font-semibold ${overallStatusBadge.classes}`}
               >
@@ -528,25 +541,25 @@ export default function App() {
               <span className="font-mono-tabular font-semibold text-[#2B7FFF]">
                 {activeScenario.code}
               </span>
-              <span aria-hidden="true">|</span>
+              <span className="hidden sm:inline" aria-hidden="true">|</span>
               <span className="text-[#E5E7EB] font-medium">{activeEnvironment.name}</span>
-              <span aria-hidden="true">|</span>
+              <span className="hidden sm:inline" aria-hidden="true">|</span>
               <span className="font-mono-tabular text-[11px]">{activeEnvironment.orbitOrLocation}</span>
               {activeScanFinding && (
                 <>
-                  <span aria-hidden="true">|</span>
+                  <span className="hidden sm:inline" aria-hidden="true">|</span>
                   <span className="inline-flex items-center gap-1 font-mono-tabular text-[11px] font-medium text-[#F59E0B]">
-                    <ScanLine className="h-3.5 w-3.5" aria-hidden="true" />
-                    {activeScanFinding.scanLabel} ({activeScanFinding.severity})
+                    <ScanLine className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                    <span>{activeScanFinding.scanLabel} ({activeScanFinding.severity})</span>
                   </span>
                 </>
               )}
             </div>
-            <p className="mt-1 text-xs sm:text-sm text-[#E5E7EB]">
+            <p className="mt-1.5 text-xs sm:text-sm text-[#E5E7EB]">
               {activeScenario.description}
             </p>
           </div>
-          <div className="flex items-center gap-3 font-mono-tabular text-[11px] text-[#8E96AA] shrink-0">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono-tabular text-[11px] text-[#8E96AA] shrink-0 border-t border-[#232734] pt-2 lg:border-t-0 lg:pt-0">
             <span>
               ROUTINE{' '}
               <strong className="text-white">
@@ -562,9 +575,9 @@ export default function App() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-12 items-start">
-          {/* Left Column (3 cols): Crew Readiness & Routine + Biomarker Readouts/Controls */}
-          <div className="xl:col-span-3 flex flex-col gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-12 items-start">
+          {/* Left Desktop (3 cols) / Bottom-Left Tablet (6 cols): Crew Readiness & Biomarker Controls */}
+          <div className="order-3 md:order-2 md:col-span-6 xl:order-1 xl:col-span-3 flex flex-col gap-4 min-w-0">
             <CrewReadinessHUD
               readiness={readinessSummary}
               streakDays={displayStreakDays}
@@ -585,8 +598,8 @@ export default function App() {
             />
           </div>
 
-          {/* Centerpiece (5 cols): Precision Clinical CAD Anatomical Schematic */}
-          <div className="xl:col-span-5 xl:sticky xl:top-[116px]">
+          {/* Centerpiece Desktop (5 cols sticky) / Full-Width Top Tablet (12 cols) / Top Mobile: Anatomical CAD Schematic */}
+          <div className="order-1 md:order-1 md:col-span-12 xl:order-2 xl:col-span-5 xl:sticky xl:top-[116px] min-w-0">
             <AnatomicalBodyMap
               systems={evaluationReport.systemEvaluations}
               selectedSystem={selectedSystem}
@@ -594,8 +607,8 @@ export default function App() {
             />
           </div>
 
-          {/* Right Column (4 cols): Biomedical Oscilloscope Traces + Autonomous Countermeasures */}
-          <div className="xl:col-span-4 flex flex-col gap-4">
+          {/* Right Desktop (4 cols) / Bottom-Right Tablet (6 cols): Oscilloscope Traces + Countermeasures */}
+          <div className="order-2 md:order-3 md:col-span-6 xl:order-3 xl:col-span-4 flex flex-col gap-4 min-w-0">
             <DynamicTelemetryCharts
               series={activeScenario.timeSeries14Day}
               environment={activeEnvironment}

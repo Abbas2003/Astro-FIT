@@ -15,7 +15,7 @@ export const PWAInstallButton: React.FC = () => {
       <button
         type="button"
         onClick={() => void install()}
-        className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/15 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#2B7FFF]/25 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] whitespace-nowrap shrink-0"
+        className="inline-flex items-center justify-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/15 px-3 py-2 sm:py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#2B7FFF]/25 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] whitespace-nowrap shrink-0"
       >
         <Download className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
         <span>Install App</span>
@@ -29,7 +29,7 @@ export const PWAInstallButton: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowIOSGuide(true)}
-          className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#232734] bg-[#11131A] px-3 py-1.5 text-xs font-medium text-[#E5E7EB] transition-colors hover:border-[#2B7FFF] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] whitespace-nowrap shrink-0"
+          className="inline-flex items-center justify-center gap-1.5 rounded-[4px] border border-[#232734] bg-[#11131A] px-3 py-2 sm:py-1.5 text-xs font-medium text-[#E5E7EB] transition-colors hover:border-[#2B7FFF] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF] whitespace-nowrap shrink-0"
         >
           <Share className="h-3.5 w-3.5 text-[#8E96AA]" aria-hidden="true" />
           <span>Install</span>
