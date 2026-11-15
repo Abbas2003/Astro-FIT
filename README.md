@@ -12,7 +12,7 @@
 
 - **Live Deployment:** [https://astro-fit-ten.vercel.app/](https://astro-fit-ten.vercel.app/)
 - **Presentation Slides:** [Check out our presentation here](https://docs.google.com/presentation/d/1ZeGRVQK5hmxuOAObG82Cca1hVZbkqIIU/edit?slide=id.p1#slide=id.p1)
-- **YouTube Video Demo:** `[ADD_YOUTUBE_VIDEO_LINK_HERE]` *(Placeholder — replace with YouTube walkthrough URL)*
+- **YouTube Video Demo:** [Check out YouTube Video](https://youtu.be/jRFoNGzJi_M)
 
 ---
 
