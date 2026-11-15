@@ -12,6 +12,7 @@ import { MISSION_ENVIRONMENTS } from '../lib/hrpEngine';
 interface OfflineSyncModalProps {
   isOpen: boolean;
   onClose: () => void;
+  crewLabel: string;
   browserOnline: boolean;
   simulateBlackout: boolean;
   onToggleSimulateBlackout: () => void;
@@ -26,6 +27,7 @@ interface OfflineSyncModalProps {
 export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
   isOpen,
   onClose,
+  crewLabel,
   browserOnline,
   simulateBlackout,
   onToggleSimulateBlackout,
@@ -65,7 +67,9 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between gap-3 border-b border-[#232734] px-4 py-3 sm:px-6 sm:py-4">
           <div className="min-w-0">
-            <div className="flight-micro-label truncate">IndexedDB Telemetry Buffer · DSN Link</div>
+            <div className="flight-micro-label truncate">
+              IndexedDB Buffer · {crewLabel}
+            </div>
             <h2 id="offline-sync-title" className="mt-0.5 text-sm sm:text-base font-semibold text-white truncate">
               Deep-Space Offline Store &amp; Sync Queue
             </h2>
@@ -154,7 +158,7 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
         <div className="flex-1 overflow-y-auto bg-[#090A0F] px-4 py-4 sm:px-6">
           {logs.length === 0 ? (
             <div className="rounded-[4px] border border-dashed border-[#232734] py-10 px-4 text-center text-xs text-[#8E96AA]">
-              No telemetry checkpoints logged. Submit a vitals reading to inspect IndexedDB queueing.
+              No telemetry checkpoints logged for {crewLabel}. Submit a vitals reading to inspect IndexedDB queueing.
             </div>
           ) : (
             <div className="space-y-2">
@@ -173,6 +177,12 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
                         </span>
                         <span className="text-[#3B4254]">·</span>
                         <span>{env.shortName}</span>
+                        {entry.crewLabel && (
+                          <>
+                            <span className="text-[#3B4254]">·</span>
+                            <span className="text-[#2B7FFF]">{entry.crewLabel}</span>
+                          </>
+                        )}
                       </div>
                       <span
                         className={`font-mono-tabular text-[11px] font-semibold ${

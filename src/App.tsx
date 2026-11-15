@@ -7,6 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Activity,
   Bot,
+  ChevronDown,
   ClipboardPlus,
   CloudOff,
   Flame,
@@ -29,7 +30,15 @@ import {
   ScenarioId,
 } from './lib/hrpEngine';
 import {
+  CrewProfile,
+  DEFAULT_CREW_ID,
+  formatCrewMedicalId,
+  PRESET_CREW_ROSTER,
+} from './lib/crewProfiles';
+import {
+  loadCrewRosterState,
   loadOfflineSnapshot,
+  saveCrewRosterState,
   saveOfflineSnapshot,
   useOfflineTelemetrySync,
 } from './lib/offlineSync';
@@ -43,6 +52,8 @@ import { CrewReadinessHUD } from './components/CrewReadinessHUD';
 import { SelfCheckModal } from './components/SelfCheckModal';
 import { FlightSurgeonAssistant } from './components/FlightSurgeonAssistant';
 import { PWAInstallButton } from './components/PWAInstallButton';
+import { BootLoadingScreen } from './components/BootLoadingScreen';
+import { CrewProfileModal } from './components/CrewProfileModal';
 
 interface VehicleConsoleMeta {
   vehicleCallsign: string;
@@ -90,6 +101,12 @@ function formatFlightDeckMET(totalSeconds: number): string {
 }
 
 export default function App() {
+  const [roster, setRoster] = useState<CrewProfile[]>(PRESET_CREW_ROSTER);
+  const [activeCrewId, setActiveCrewId] = useState<string>(DEFAULT_CREW_ID);
+  const [rosterHydrated, setRosterHydrated] = useState(false);
+  const [snapshotReadyForCrewId, setSnapshotReadyForCrewId] = useState<string | null>(null);
+  const [isCrewModalOpen, setIsCrewModalOpen] = useState(false);
+
   const [scenarioId, setScenarioId] = useState<ScenarioId>('mars_spe');
   const [environmentId, setEnvironmentId] = useState<MissionEnvironmentId>(
     MISSION_SCENARIOS.mars_spe.recommendedEnvironment
@@ -111,6 +128,16 @@ export default function App() {
   const [isSurgeonOpen, setIsSurgeonOpen] = useState(false);
   const [metOffsetSeconds, setMetOffsetSeconds] = useState(0);
   const [hydratedFromCache, setHydratedFromCache] = useState(false);
+  const [showBootScreen, setShowBootScreen] = useState(true);
+
+  const activeCrew = useMemo(
+    () => roster.find((c) => c.id === activeCrewId) ?? roster[0] ?? PRESET_CREW_ROSTER[0],
+    [roster, activeCrewId]
+  );
+  const activeCrewMedicalId = useMemo(
+    () => formatCrewMedicalId(activeCrew),
+    [activeCrew]
+  );
 
   const {
     browserOnline,
@@ -121,12 +148,39 @@ export default function App() {
     lastSyncedAtIso,
     logVitalsOfflineAware,
     syncPendingLogs,
-  } = useOfflineTelemetrySync(simulateBlackout);
+  } = useOfflineTelemetrySync(simulateBlackout, activeCrew.id);
 
-  // Hydrate offline snapshot on startup
+  // Hydrate crew roster on startup
   useEffect(() => {
     let active = true;
-    void loadOfflineSnapshot().then((snapshot) => {
+    void loadCrewRosterState().then((state) => {
+      if (!active) return;
+      setRoster(state.roster);
+      const validId = state.roster.some((c) => c.id === state.activeCrewId)
+        ? state.activeCrewId
+        : state.roster[0].id;
+      setActiveCrewId(validId);
+      setRosterHydrated(true);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Persist crew roster state when updated
+  useEffect(() => {
+    if (!rosterHydrated) return;
+    void saveCrewRosterState({ activeCrewId: activeCrew.id, roster });
+  }, [activeCrew.id, roster, rosterHydrated]);
+
+  // Hydrate active crew member's isolated snapshot whenever activeCrew.id changes
+  useEffect(() => {
+    if (!rosterHydrated) return;
+    let active = true;
+    const targetCrew = roster.find((c) => c.id === activeCrewId) ?? roster[0];
+    if (!targetCrew) return;
+
+    void loadOfflineSnapshot(targetCrew.id).then((snapshot) => {
       if (!active) return;
       if (snapshot) {
         setScenarioId(snapshot.scenarioId);
@@ -134,34 +188,53 @@ export default function App() {
         setReadings(snapshot.readings);
         setCompletedCountermeasures(snapshot.completedCountermeasures ?? []);
         setCompletedRoutineIds(snapshot.completedRoutineIds ?? []);
-        if (typeof snapshot.streakDays === 'number') {
-          setBaseStreakDays(snapshot.streakDays);
-        }
-        if (snapshot.scanFinding) {
-          setActiveScanFinding(snapshot.scanFinding);
-        }
+        setBaseStreakDays(
+          typeof snapshot.streakDays === 'number'
+            ? snapshot.streakDays
+            : targetCrew.defaultStreakDays
+        );
+        setActiveScanFinding(snapshot.scanFinding ?? null);
+      } else {
+        const preset = MISSION_SCENARIOS[targetCrew.defaultScenarioId];
+        setScenarioId(targetCrew.defaultScenarioId);
+        setEnvironmentId(preset.recommendedEnvironment);
+        setReadings(preset.triggerReading);
+        setCompletedCountermeasures([]);
+        setCompletedRoutineIds([]);
+        setBaseStreakDays(targetCrew.defaultStreakDays);
+        setActiveScanFinding(null);
       }
+      setSelectedDayIndex(null);
+      setIsModified(false);
+      setMetOffsetSeconds(0);
+      setSnapshotReadyForCrewId(targetCrew.id);
       setHydratedFromCache(true);
     });
+
     return () => {
       active = false;
     };
-  }, []);
+  }, [activeCrewId, rosterHydrated]);
 
-  // Persist snapshot to IndexedDB whenever state updates
+  // Persist active crew member's snapshot to IndexedDB when their state updates
   useEffect(() => {
-    if (!hydratedFromCache) return;
-    void saveOfflineSnapshot({
-      environmentId,
-      scenarioId,
-      readings,
-      completedCountermeasures,
-      completedRoutineIds,
-      streakDays: baseStreakDays,
-      scanFinding: activeScanFinding,
-      updatedAtIso: new Date().toISOString(),
-    });
+    if (!hydratedFromCache || snapshotReadyForCrewId !== activeCrew.id) return;
+    void saveOfflineSnapshot(
+      {
+        environmentId,
+        scenarioId,
+        readings,
+        completedCountermeasures,
+        completedRoutineIds,
+        streakDays: baseStreakDays,
+        scanFinding: activeScanFinding,
+        updatedAtIso: new Date().toISOString(),
+      },
+      activeCrew.id
+    );
   }, [
+    activeCrew.id,
+    snapshotReadyForCrewId,
     environmentId,
     scenarioId,
     readings,
@@ -278,12 +351,42 @@ export default function App() {
     );
   };
 
+  const handleSelectCrew = (crewId: string) => {
+    if (crewId === activeCrew.id) return;
+    setSnapshotReadyForCrewId(null);
+    setActiveCrewId(crewId);
+  };
+
+  const handleCreateCrew = (profile: CrewProfile) => {
+    setRoster((prev) => [...prev, profile]);
+    setSnapshotReadyForCrewId(null);
+    setActiveCrewId(profile.id);
+  };
+
+  const handleUpdateCrew = (updated: CrewProfile) => {
+    setRoster((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
+  };
+
+  const handleDeleteCrew = (crewId: string) => {
+    setRoster((prev) => {
+      const next = prev.filter((c) => c.id !== crewId);
+      if (next.length === 0) return prev;
+      if (activeCrewId === crewId) {
+        setSnapshotReadyForCrewId(null);
+        setActiveCrewId(next[0].id);
+      }
+      return next;
+    });
+  };
+
   const handleLogTelemetry = async (notes: string) => {
     const dayLabel =
       selectedDayIndex !== null
         ? activeScenario.timeSeries14Day[selectedDayIndex]?.missionDayLabel ?? 'Active'
         : 'Trigger Snapshot';
     await logVitalsOfflineAware({
+      crewId: activeCrew.id,
+      crewLabel: activeCrewMedicalId,
       missionDayLabel: dayLabel,
       environmentId,
       scenarioId,
@@ -308,6 +411,8 @@ export default function App() {
         ? activeScenario.timeSeries14Day[selectedDayIndex]?.missionDayLabel ?? 'Active'
         : 'Self-Check';
     await logVitalsOfflineAware({
+      crewId: activeCrew.id,
+      crewLabel: activeCrewMedicalId,
       missionDayLabel: dayLabel,
       environmentId,
       scenarioId,
@@ -318,6 +423,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#090A0F] text-[#E5E7EB] flex flex-col">
+      {showBootScreen && (
+        <BootLoadingScreen
+          isHydrated={hydratedFromCache}
+          onComplete={() => setShowBootScreen(false)}
+        />
+      )}
       {/* Operational Flight-Deck Console Header */}
       <header className="md:sticky md:top-0 z-30 border-b border-[#232734] bg-[#0D0F15]">
         {/* Tier 1: Flight Console Telemetry Strip */}
@@ -379,12 +490,20 @@ export default function App() {
                 </span>
               </div>
 
-              <div className="flex flex-col min-w-0 sm:border-l sm:border-[#232734] sm:pl-4">
-                <span className="flight-micro-label">Crew Medical ID</span>
-                <span className="font-mono-tabular text-[11px] sm:text-xs font-semibold text-[#E5E7EB] truncate">
-                  CDR. M. ABBAS // BIO-ID 04
+              <button
+                type="button"
+                onClick={() => setIsCrewModalOpen(true)}
+                className="group flex flex-col items-start min-w-0 text-left sm:border-l sm:border-[#232734] sm:pl-4 rounded-[4px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
+                title="Switch crew profile or edit Crew Medical ID"
+              >
+                <span className="flight-micro-label group-hover:text-[#2B7FFF] transition-colors">
+                  Crew Medical ID
                 </span>
-              </div>
+                <span className="inline-flex items-center gap-1 max-w-full font-mono-tabular text-[11px] sm:text-xs font-semibold text-[#E5E7EB] group-hover:text-white transition-colors">
+                  <span className="truncate">{activeCrewMedicalId}</span>
+                  <ChevronDown className="h-3 w-3 text-[#2B7FFF] shrink-0" aria-hidden="true" />
+                </span>
+              </button>
 
               <div className="hidden md:flex flex-col border-l border-[#232734] pl-4">
                 <span className="flight-micro-label">System Posture</span>
@@ -655,6 +774,8 @@ export default function App() {
         report={evaluationReport}
         readiness={readinessSummary}
         scenarioId={scenarioId}
+        crewMedicalId={activeCrewMedicalId}
+        crewRole={activeCrew.roleTitle}
         isLinkAvailable={isLinkAvailable}
       />
 
@@ -662,6 +783,7 @@ export default function App() {
       <OfflineSyncModal
         isOpen={isSyncModalOpen}
         onClose={() => setIsSyncModalOpen(false)}
+        crewLabel={activeCrewMedicalId}
         browserOnline={browserOnline}
         simulateBlackout={simulateBlackout}
         onToggleSimulateBlackout={() => setSimulateBlackout((prev) => !prev)}
@@ -671,6 +793,18 @@ export default function App() {
         lastSyncedAtIso={lastSyncedAtIso}
         logs={logs}
         onSyncNow={syncPendingLogs}
+      />
+
+      {/* Dynamic Crew Medical ID Switcher & Custom Profile Modal */}
+      <CrewProfileModal
+        isOpen={isCrewModalOpen}
+        roster={roster}
+        activeCrewId={activeCrew.id}
+        onClose={() => setIsCrewModalOpen(false)}
+        onSelectCrew={handleSelectCrew}
+        onCreateCrew={handleCreateCrew}
+        onUpdateCrew={handleUpdateCrew}
+        onDeleteCrew={handleDeleteCrew}
       />
     </div>
   );

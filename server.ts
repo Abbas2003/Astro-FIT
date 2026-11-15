@@ -20,6 +20,8 @@ interface FlightSurgeonRequestBody {
   message: string;
   history?: ChatHistoryTurn[];
   telemetryContext?: {
+    crewMedicalId?: string;
+    crewRole?: string;
     environmentName: string;
     gravityLabel: string;
     earthDelayLabel: string;
@@ -78,6 +80,9 @@ async function startServer() {
     const ctx = body.telemetryContext;
     const contextSummary = ctx
       ? [
+          ctx.crewMedicalId
+            ? `Crew Member: ${ctx.crewMedicalId}${ctx.crewRole ? ` (${ctx.crewRole})` : ''}`
+            : null,
           `Active Mission Environment: ${ctx.environmentName} (${ctx.gravityLabel})`,
           `Earth Comms Delay: ${ctx.earthDelayLabel} (Autonomous Mode: ${ctx.autonomousModeActive ? 'ACTIVE' : 'OFF'})`,
           `Active Scenario: ${ctx.scenarioName}`,
@@ -85,7 +90,9 @@ async function startServer() {
           `Live Biomarkers: HR=${ctx.readings.heartRate} bpm, BP=${ctx.readings.systolicBP}/${ctx.readings.diastolicBP} mmHg, Glucose=${ctx.readings.bloodGlucose} mg/dL, Temp=${ctx.readings.bodyTemp}°C, Sleep=${ctx.readings.sleepHours} hrs, Cumulative Radiation=${ctx.readings.cumulativeRadiation} mSv, Bone T-score=${ctx.readings.boneDensityIndex}, Mood/Cog=${ctx.readings.moodCognitiveScore}/10`,
           `System Statuses: Neuro=${ctx.systemStatuses.neuro_behavioral}, Cardiovascular=${ctx.systemStatuses.cardiovascular}, Musculoskeletal=${ctx.systemStatuses.musculoskeletal}, Radiation/Immune=${ctx.systemStatuses.radiation_immune}`,
           `Prioritized Countermeasures: ${ctx.activeCountermeasures.map((c) => `[${c.priority}] ${c.protocolCode} ${c.title}`).join('; ')}`,
-        ].join('\n')
+        ]
+          .filter(Boolean)
+          .join('\n')
       : 'No live telemetry context provided.';
 
     const systemInstruction = [

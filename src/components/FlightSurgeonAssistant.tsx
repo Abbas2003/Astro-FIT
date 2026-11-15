@@ -27,6 +27,8 @@ interface FlightSurgeonAssistantProps {
   report: MissionEvaluationReport;
   readiness: MissionReadinessSummary;
   scenarioId: ScenarioId;
+  crewMedicalId: string;
+  crewRole: string;
   isLinkAvailable: boolean;
 }
 
@@ -43,6 +45,8 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
   report,
   readiness,
   scenarioId,
+  crewMedicalId,
+  crewRole,
   isLinkAvailable,
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -109,6 +113,8 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
           message: trimmed,
           history: historyPayload,
           telemetryContext: {
+            crewMedicalId,
+            crewRole,
             environmentName: report.environment.name,
             gravityLabel: report.environment.gravityLabel,
             earthDelayLabel: report.environment.earthDelayLabel,

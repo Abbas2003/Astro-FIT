@@ -5,9 +5,16 @@ import {
   MissionEnvironmentId,
   ScenarioId,
 } from './hrpEngine';
+import {
+  CrewProfile,
+  DEFAULT_CREW_ID,
+  PRESET_CREW_ROSTER,
+} from './crewProfiles';
 
 export interface OfflineTelemetryEntry {
   id: string;
+  crewId?: string;
+  crewLabel?: string;
   loggedAtIso: string;
   missionDayLabel: string;
   environmentId: MissionEnvironmentId;
@@ -29,11 +36,21 @@ export interface OfflineSnapshot {
   updatedAtIso: string;
 }
 
+export interface CrewRosterState {
+  activeCrewId: string;
+  roster: CrewProfile[];
+}
+
 const DB_NAME = 'astrofit-offline-db';
 const DB_VERSION = 1;
 const STORE_LOGS = 'telemetry_logs';
 const STORE_STATE = 'mission_state';
-const STATE_KEY = 'active_snapshot';
+const LEGACY_STATE_KEY = 'active_snapshot';
+const ROSTER_STATE_KEY = 'crew_roster_state';
+
+function snapshotKeyForCrew(crewId: string): string {
+  return `active_snapshot_${crewId}`;
+}
 
 function openDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -61,31 +78,95 @@ function openDatabase(): Promise<IDBDatabase> {
   });
 }
 
-export async function saveOfflineSnapshot(snapshot: OfflineSnapshot): Promise<void> {
+export async function saveCrewRosterState(state: CrewRosterState): Promise<void> {
   try {
     const db = await openDatabase();
     await new Promise<void>((resolve, reject) => {
       const tx = db.transaction(STORE_STATE, 'readwrite');
-      tx.objectStore(STORE_STATE).put({ key: STATE_KEY, ...snapshot });
+      tx.objectStore(STORE_STATE).put({ key: ROSTER_STATE_KEY, ...state });
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
   } catch {
-    // Fallback to localStorage if IndexedDB is blocked
     try {
-      localStorage.setItem('astrofit_snapshot', JSON.stringify(snapshot));
+      localStorage.setItem('astrofit_crew_roster', JSON.stringify(state));
     } catch {
       // Ignore quota errors
     }
   }
 }
 
-export async function loadOfflineSnapshot(): Promise<OfflineSnapshot | null> {
+export async function loadCrewRosterState(): Promise<CrewRosterState> {
+  const fallback: CrewRosterState = {
+    activeCrewId: DEFAULT_CREW_ID,
+    roster: PRESET_CREW_ROSTER,
+  };
+
   try {
     const db = await openDatabase();
-    return await new Promise<OfflineSnapshot | null>((resolve, reject) => {
+    const loaded = await new Promise<CrewRosterState | null>((resolve, reject) => {
       const tx = db.transaction(STORE_STATE, 'readonly');
-      const req = tx.objectStore(STORE_STATE).get(STATE_KEY);
+      const req = tx.objectStore(STORE_STATE).get(ROSTER_STATE_KEY);
+      req.onsuccess = () => {
+        if (!req.result) {
+          resolve(null);
+          return;
+        }
+        const { key: _ignored, ...state } = req.result as CrewRosterState & { key: string };
+        resolve(state);
+      };
+      req.onerror = () => reject(req.error);
+    });
+    if (loaded && Array.isArray(loaded.roster) && loaded.roster.length > 0) {
+      return loaded;
+    }
+    return fallback;
+  } catch {
+    try {
+      const raw = localStorage.getItem('astrofit_crew_roster');
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw) as CrewRosterState;
+      if (parsed && Array.isArray(parsed.roster) && parsed.roster.length > 0) {
+        return parsed;
+      }
+      return fallback;
+    } catch {
+      return fallback;
+    }
+  }
+}
+
+export async function saveOfflineSnapshot(
+  snapshot: OfflineSnapshot,
+  crewId: string = DEFAULT_CREW_ID
+): Promise<void> {
+  const key = snapshotKeyForCrew(crewId);
+  try {
+    const db = await openDatabase();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(STORE_STATE, 'readwrite');
+      tx.objectStore(STORE_STATE).put({ key, ...snapshot });
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch {
+    try {
+      localStorage.setItem(`astrofit_snapshot_${crewId}`, JSON.stringify(snapshot));
+    } catch {
+      // Ignore quota errors
+    }
+  }
+}
+
+export async function loadOfflineSnapshot(
+  crewId: string = DEFAULT_CREW_ID
+): Promise<OfflineSnapshot | null> {
+  const key = snapshotKeyForCrew(crewId);
+  try {
+    const db = await openDatabase();
+    const primary = await new Promise<OfflineSnapshot | null>((resolve, reject) => {
+      const tx = db.transaction(STORE_STATE, 'readonly');
+      const req = tx.objectStore(STORE_STATE).get(key);
       req.onsuccess = () => {
         if (!req.result) {
           resolve(null);
@@ -96,9 +177,32 @@ export async function loadOfflineSnapshot(): Promise<OfflineSnapshot | null> {
       };
       req.onerror = () => reject(req.error);
     });
+
+    if (primary) return primary;
+
+    // Legacy migration for default crew
+    if (crewId === DEFAULT_CREW_ID) {
+      return await new Promise<OfflineSnapshot | null>((resolve, reject) => {
+        const tx = db.transaction(STORE_STATE, 'readonly');
+        const req = tx.objectStore(STORE_STATE).get(LEGACY_STATE_KEY);
+        req.onsuccess = () => {
+          if (!req.result) {
+            resolve(null);
+            return;
+          }
+          const { key: _ignored, ...snapshot } = req.result as OfflineSnapshot & { key: string };
+          resolve(snapshot);
+        };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    return null;
   } catch {
     try {
-      const raw = localStorage.getItem('astrofit_snapshot');
+      const raw =
+        localStorage.getItem(`astrofit_snapshot_${crewId}`) ??
+        (crewId === DEFAULT_CREW_ID ? localStorage.getItem('astrofit_snapshot') : null);
       return raw ? (JSON.parse(raw) as OfflineSnapshot) : null;
     } catch {
       return null;
@@ -200,17 +304,20 @@ export function useOnlineStatus(): boolean {
   return isOnline;
 }
 
-export function useOfflineTelemetrySync(simulateDeepSpaceBlackout: boolean) {
+export function useOfflineTelemetrySync(
+  simulateDeepSpaceBlackout: boolean,
+  activeCrewId: string = DEFAULT_CREW_ID
+) {
   const browserOnline = useOnlineStatus();
   const isLinkAvailable = browserOnline && !simulateDeepSpaceBlackout;
 
-  const [logs, setLogs] = useState<OfflineTelemetryEntry[]>([]);
+  const [allLogs, setAllLogs] = useState<OfflineTelemetryEntry[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSyncedAtIso, setLastSyncedAtIso] = useState<string | null>(null);
 
   const refreshLogs = useCallback(async () => {
     const loaded = await listTelemetryLogs();
-    setLogs(loaded);
+    setAllLogs(loaded);
   }, []);
 
   useEffect(() => {
@@ -225,11 +332,10 @@ export function useOfflineTelemetrySync(simulateDeepSpaceBlackout: boolean) {
 
     setIsSyncing(true);
     try {
-      // Simulate Earth-link packet burst handoff
       await new Promise((r) => setTimeout(r, 450));
       await markLogsSynced(pending.map((p) => p.id));
       const updated = await listTelemetryLogs();
-      setLogs(updated);
+      setAllLogs(updated);
       setLastSyncedAtIso(new Date().toISOString());
       return pending.length;
     } finally {
@@ -237,7 +343,6 @@ export function useOfflineTelemetrySync(simulateDeepSpaceBlackout: boolean) {
     }
   }, [isLinkAvailable]);
 
-  // Automatically flush queued offline records when connectivity restores
   useEffect(() => {
     if (isLinkAvailable) {
       void syncPendingLogs();
@@ -246,6 +351,8 @@ export function useOfflineTelemetrySync(simulateDeepSpaceBlackout: boolean) {
 
   const logVitalsOfflineAware = useCallback(
     async (payload: {
+      crewId: string;
+      crewLabel: string;
       missionDayLabel: string;
       environmentId: MissionEnvironmentId;
       scenarioId: ScenarioId;
@@ -254,6 +361,8 @@ export function useOfflineTelemetrySync(simulateDeepSpaceBlackout: boolean) {
     }) => {
       const entry: OfflineTelemetryEntry = {
         id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        crewId: payload.crewId,
+        crewLabel: payload.crewLabel,
         loggedAtIso: new Date().toISOString(),
         missionDayLabel: payload.missionDayLabel,
         environmentId: payload.environmentId,
@@ -265,7 +374,7 @@ export function useOfflineTelemetrySync(simulateDeepSpaceBlackout: boolean) {
       };
       await appendTelemetryLog(entry);
       const updated = await listTelemetryLogs();
-      setLogs(updated);
+      setAllLogs(updated);
       if (isLinkAvailable) {
         setLastSyncedAtIso(new Date().toISOString());
       }
@@ -274,6 +383,10 @@ export function useOfflineTelemetrySync(simulateDeepSpaceBlackout: boolean) {
     [isLinkAvailable]
   );
 
+  // Filter logs to the active astronaut (legacy logs without crewId map to default crew)
+  const logs = allLogs.filter(
+    (entry) => (entry.crewId ?? DEFAULT_CREW_ID) === activeCrewId
+  );
   const pendingCount = logs.filter((l) => l.syncStatus === 'pending').length;
 
   return {
