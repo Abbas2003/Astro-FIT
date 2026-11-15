@@ -30,7 +30,7 @@ const STATUS_BADGE: Record<
     text: 'text-[#10B981]',
     bg: 'bg-[#10B981]/10',
     glyph: '●',
-    label: 'NOMINAL',
+    label: 'NORMAL',
   },
   CAUTION: {
     border: 'border-[#F59E0B]/60',
@@ -113,7 +113,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
           {/* Active Vitals for This System */}
           <section aria-labelledby="drawer-vitals-heading">
             <h3 id="drawer-vitals-heading" className="flight-micro-label">
-              System Biomarkers &amp; Calibrated Baselines
+              Current Vitals &amp; Safe Ranges
             </h3>
             <p className="mt-2 text-xs text-[#E5E7EB] leading-relaxed">
               {system.clinicalFindingSummary}
@@ -141,7 +141,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
                       </span>
                     </div>
                     <div className="mt-1 font-mono-tabular text-[11px] text-[#8E96AA]">
-                      Baseline: {bio.nominalRangeText}
+                      Safe range: {bio.nominalRangeText}
                     </div>
                   </div>
                 );
@@ -157,7 +157,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
             <div className="flex items-center gap-2">
               <Stethoscope className="h-4 w-4 text-[#2B7FFF]" aria-hidden="true" />
               <h3 id="drawer-hazards-heading" className="flight-micro-label">
-                Spaceflight Physiology · NASA HRP 5 Hazards
+                Why Space Affects This System · NASA 5 Hazards
               </h3>
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono-tabular text-xs text-[#2B7FFF]">
@@ -181,7 +181,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
             <div className="flex items-center gap-2">
               <ClipboardCheck className="h-4 w-4 text-[#2B7FFF]" aria-hidden="true" />
               <h3 id="drawer-self-exam-heading" className="flight-micro-label">
-                Self-Exam Protocol · {system.selfExamProtocolName}
+                Self-Check Guide · {system.selfExamProtocolName}
               </h3>
             </div>
             <ol className="mt-3 space-y-2.5">
@@ -196,7 +196,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
                     </span>
                   </div>
                   <div className="mt-1 font-mono-tabular text-[11px] text-[#2B7FFF]">
-                    HARDWARE: {step.hardwareRequired}
+                    TOOLS NEEDED: {step.hardwareRequired}
                   </div>
                   <p className="mt-1.5 text-xs leading-relaxed text-[#E5E7EB]">
                     {step.instruction}
@@ -215,11 +215,11 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-[#2B7FFF]" aria-hidden="true" />
                 <h3 id="drawer-countermeasures-heading" className="flight-micro-label">
-                  Prescribed Autonomous Countermeasures
+                  Recommended Recovery Steps
                 </h3>
               </div>
               <span className="font-mono-tabular text-[10px] text-[#8E96AA]">
-                {environment.autonomousModeRequired ? 'AUTONOMOUS AUTH' : 'EARTH-SYNCED'}
+                {environment.autonomousModeRequired ? 'START RIGHT AWAY' : 'SYNCED WITH EARTH'}
               </span>
             </div>
 
@@ -265,12 +265,12 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
                         {isDone ? (
                           <>
                             <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
-                            <span>EXECUTED</span>
+                            <span>DONE</span>
                           </>
                         ) : (
                           <>
                             <Circle className="h-3.5 w-3.5" aria-hidden="true" />
-                            <span>MARK EXECUTED</span>
+                            <span>MARK DONE</span>
                           </>
                         )}
                       </button>
@@ -282,7 +282,7 @@ export const ClinicalInspectionDrawer: React.FC<ClinicalInspectionDrawerProps> =
 
                     <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-[#232734] pt-2 text-[11px]">
                       <span className="font-mono-tabular text-[#2B7FFF]">
-                        TARGET: {cm.targetDurationOrDose}
+                        GOAL: {cm.targetDurationOrDose}
                       </span>
                       <span className="text-[#8E96AA]">
                         {cm.autonomousExecutionNote}

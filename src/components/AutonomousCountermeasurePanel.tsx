@@ -36,7 +36,7 @@ const STATUS_DISPLAY: Record<
     border: 'border-[#232734]',
     text: 'text-[#10B981]',
     glyph: '●',
-    label: 'NOMINAL',
+    label: 'NORMAL',
   },
   CAUTION: {
     border: 'border-[#F59E0B]/60',
@@ -85,7 +85,7 @@ export const AutonomousCountermeasurePanel: React.FC<
       {/* Overall Clinical Posture Module */}
       <section className={`rounded-[6px] border ${overallStyle.border} bg-[#11131A] p-3.5 sm:p-4`}>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="flight-micro-label">Crew Medical Posture</span>
+          <span className="flight-micro-label">Overall Health Status</span>
           <span className={`font-mono-tabular text-[11px] font-semibold ${overallStyle.text}`}>
             {overallStyle.glyph} {overallStyle.label}
           </span>
@@ -98,13 +98,13 @@ export const AutonomousCountermeasurePanel: React.FC<
 
         <div className="mt-3 grid grid-cols-2 gap-3 border-t border-[#232734] pt-3">
           <div>
-            <div className="flight-micro-label">Gravity Field</div>
+            <div className="flight-micro-label">Gravity Level</div>
             <div className="mt-0.5 font-mono-tabular text-xs font-medium text-white">
               {report.environment.gravityLabel}
             </div>
           </div>
           <div className="min-w-0">
-            <div className="flight-micro-label">Cabin ECLSS</div>
+            <div className="flight-micro-label">Cabin Air &amp; Pressure</div>
             <div
               className="mt-0.5 font-mono-tabular text-xs font-medium text-white truncate"
               title={report.environment.cabinAtmosphere}
@@ -119,10 +119,10 @@ export const AutonomousCountermeasurePanel: React.FC<
       <section className="rounded-[6px] border border-[#232734] bg-[#11131A] p-3.5 sm:p-4">
         <div className="flex items-center justify-between gap-2 border-b border-[#232734] pb-2.5">
           <div>
-            <div className="flight-micro-label">Hazard Classification · HRP-5</div>
+            <div className="flight-micro-label">Space Risk Tracker</div>
             <div className="mt-0.5 flex items-center gap-1.5">
               <AlertTriangle className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
-              <h2 className="text-sm font-semibold text-white">NASA 5 Hazards Matrix</h2>
+              <h2 className="text-sm font-semibold text-white">NASA 5 Space Hazards</h2>
             </div>
           </div>
         </div>
@@ -150,14 +150,14 @@ export const AutonomousCountermeasurePanel: React.FC<
       <section className="flex flex-1 flex-col rounded-[6px] border border-[#232734] bg-[#11131A] p-3.5 sm:p-4 min-h-[240px]">
         <div className="flex items-center justify-between gap-2 border-b border-[#232734] pb-2.5">
           <div>
-            <div className="flight-micro-label">Autonomous Decision Engine</div>
+            <div className="flight-micro-label">Recommended Actions</div>
             <div className="mt-0.5 flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
-              <h2 className="text-sm font-semibold text-white">Countermeasure Queue</h2>
+              <h2 className="text-sm font-semibold text-white">Action Plan</h2>
             </div>
           </div>
           <span className="font-mono-tabular text-[11px] text-[#8E96AA]">
-            {report.prioritizedCountermeasures.length} ACTIVE
+            {report.prioritizedCountermeasures.length} STEPS
           </span>
         </div>
 
@@ -199,12 +199,12 @@ export const AutonomousCountermeasurePanel: React.FC<
                     {isDone ? (
                       <>
                         <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
-                        <span>EXECUTED</span>
+                        <span>DONE</span>
                       </>
                     ) : (
                       <>
                         <Circle className="h-3.5 w-3.5" aria-hidden="true" />
-                        <span>LOG</span>
+                        <span>MARK DONE</span>
                       </>
                     )}
                   </button>

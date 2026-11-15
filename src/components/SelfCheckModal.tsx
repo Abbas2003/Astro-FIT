@@ -46,40 +46,40 @@ const DIAGNOSTIC_SCAN_PRESETS: ScanPreset[] = [
   {
     id: 'ocular-nominal',
     scanType: 'ocular_sans',
-    scanLabel: 'Ocular Optic Nerve Sheath Ultrasound (SANS)',
+    scanLabel: 'Eye Pressure & Vision Scan',
     targetSystem: 'neuro_behavioral',
     severity: 'NOMINAL',
-    findingTitle: 'Nominal ONSD (4.4 mm bilateral)',
-    summary: 'No posterior globe flattening or optic disc edema detected.',
+    findingTitle: 'Normal Eye Scan (No Swelling)',
+    summary: 'Optic nerve and eye shape look healthy with no fluid buildup.',
   },
   {
     id: 'ocular-sans-elevated',
     scanType: 'ocular_sans',
-    scanLabel: 'Ocular Optic Nerve Sheath Ultrasound (SANS)',
+    scanLabel: 'Eye Pressure & Vision Scan',
     targetSystem: 'neuro_behavioral',
     severity: 'CAUTION',
-    findingTitle: 'Elevated ONSD (6.1 mm) · Mild SANS Fluid Shift',
-    summary: 'Optic nerve sheath distension detected; recommend LBNP and visual acuity monitoring.',
+    findingTitle: 'Mild Eye Pressure Buildup (Fluid Shift)',
+    summary: 'Fluid shift is pressing slightly behind the eye; rest, monitor vision, and use lower-body pressure therapy.',
     suggestedBiomarkerPatch: { moodCognitiveScore: 5.8 },
   },
   {
     id: 'msk-qus-dip',
     scanType: 'musculoskeletal_qus',
-    scanLabel: 'Musculoskeletal Calcaneal QUS Bone Scan',
+    scanLabel: 'Heel Ultrasound Bone Scan',
     targetSystem: 'musculoskeletal',
     severity: 'CAUTION',
-    findingTitle: 'Trabecular Attenuation Dip (T-score -1.35)',
-    summary: 'Early calcaneal mineral loss detected; escalate ARED resistive axial load.',
+    findingTitle: 'Early Bone Strength Dip (Score -1.35)',
+    summary: 'Mild bone mineral loss detected; increase heavy resistance workouts and Vitamin D.',
     suggestedBiomarkerPatch: { boneDensityIndex: -1.35 },
   },
   {
     id: 'cardiac-echo-strain',
     scanType: 'cardiac_echo',
-    scanLabel: 'Thoracic Cardiac & IVC Filling Ultrasound',
+    scanLabel: 'Heart & Fluid Ultrasound Scan',
     targetSystem: 'cardiovascular',
     severity: 'CRITICAL',
-    findingTitle: 'Hyperdynamic LV & >55% IVC Collapse (Hypovolemia)',
-    summary: 'Marked intravascular volume depletion; initiate immediate isotonic rehydration.',
+    findingTitle: 'Low Fluid Volume & Fast Heartbeat',
+    summary: 'Significantly low hydration detected; drink electrolyte fluids right away and rest.',
     suggestedBiomarkerPatch: { heartRate: 112, systolicBP: 144 },
   },
 ];
@@ -294,16 +294,16 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
         {/* Modal Header */}
         <div className="flex items-center justify-between gap-3 border-b border-[#232734] px-4 py-3 sm:px-6 sm:py-4">
           <div className="min-w-0">
-            <div className="flight-micro-label truncate">Crew Medical Input · Multi-Modal Capture</div>
+            <div className="flight-micro-label truncate">Daily Health Checkup</div>
             <h2 id="self-check-modal-title" className="mt-0.5 text-sm sm:text-base font-semibold text-white truncate">
-              Biomedical Self-Check Logger
+              Checkup, Focus Test &amp; Body Scan
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-1.5 text-[#8E96AA] hover:border-[#2B7FFF] hover:text-white shrink-0"
-            aria-label="Close self-check modal"
+            aria-label="Close checkup modal"
           >
             <X className="h-4 w-4" />
           </button>
@@ -321,7 +321,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
             }`}
           >
             <Sliders className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>1. Vitals &amp; Biomarkers</span>
+            <span>1. Enter Vitals</span>
           </button>
           <button
             type="button"
@@ -333,7 +333,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
             }`}
           >
             <Brain className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>2. 15s Cognitive PVT-B</span>
+            <span>2. 15s Focus Test</span>
           </button>
           <button
             type="button"
@@ -345,7 +345,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
             }`}
           >
             <ScanLine className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>3. Diagnostic Ultrasound</span>
+            <span>3. Body Scan Check</span>
           </button>
         </div>
 
@@ -401,10 +401,10 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                 <div className="flex flex-wrap items-center justify-between gap-3 rounded-[4px] border border-[#232734] bg-[#11131A] px-4 py-3">
                   <div>
                     <h3 className="text-sm font-semibold text-white">
-                      15-Second Psychomotor Vigilance Task (NASA PVT-B)
+                      15-Second Reaction &amp; Focus Test (NASA PVT-B)
                     </h3>
                     <p className="text-xs text-[#8E96AA]">
-                      Tap the target pad immediately upon blue stimulus illumination.
+                      Tap the box as quickly as you can whenever it turns blue.
                     </p>
                   </div>
                   <div className="flex items-center gap-2 font-mono-tabular text-sm font-semibold text-[#2B7FFF]">
@@ -420,7 +420,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                       onClick={startPvtTest}
                       className="w-full sm:w-auto rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/15 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white hover:bg-[#2B7FFF]/25 transition-colors"
                     >
-                      Initiate 15-Second Reflex Test
+                      Start 15-Second Focus Test
                     </button>
                   )}
 
@@ -434,7 +434,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                           : 'border-[#232734] bg-[#0D0F15] text-[#8E96AA]'
                       }`}
                     >
-                      {pvtPhase === 'stimulus' ? 'TAP TARGET NOW' : 'AWAITING STIMULUS...'}
+                      {pvtPhase === 'stimulus' ? 'TAP NOW!' : 'WAIT FOR BLUE...'}
                     </button>
                   )}
 
@@ -442,11 +442,11 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                     <div className="w-full max-w-md space-y-3 text-center">
                       <div className="inline-flex items-center gap-2 text-[#10B981] font-semibold text-xs font-mono-tabular">
                         <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
-                        <span>PVT-B ASSESSMENT COMPLETE</span>
+                        <span>FOCUS TEST COMPLETE</span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono-tabular text-xs">
                         <div className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-2.5">
-                          <div className="flight-micro-label">Mean Latency</div>
+                          <div className="flight-micro-label">Avg Reaction</div>
                           <div className="mt-1 text-base font-semibold text-white">
                             {reactionTimesMs.length > 0
                               ? Math.round(
@@ -458,13 +458,13 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                           </div>
                         </div>
                         <div className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-2.5">
-                          <div className="flight-micro-label">False Starts</div>
+                          <div className="flight-micro-label">Early Taps</div>
                           <div className="mt-1 text-base font-semibold text-[#F59E0B]">
                             {falseStarts}
                           </div>
                         </div>
                         <div className="rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/10 p-2.5">
-                          <div className="flight-micro-label">Cog Score</div>
+                          <div className="flight-micro-label">Focus Score</div>
                           <div className="mt-1 text-base font-semibold text-white">
                             {calculatedCogScore ?? draft.moodCognitiveScore}/10
                           </div>
@@ -475,14 +475,14 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                         onClick={startPvtTest}
                         className="rounded-[4px] border border-[#232734] bg-[#0D0F15] px-4 py-2 text-xs font-medium text-[#E5E7EB] hover:border-[#2B7FFF]"
                       >
-                        Re-run PVT-B Test
+                        Try Again
                       </button>
                     </div>
                   )}
 
                   {reactionTimesMs.length > 0 && pvtPhase !== 'complete' && (
                     <div className="mt-3 font-mono-tabular text-xs text-[#8E96AA]">
-                      Last reaction: <span className="text-white">{reactionTimesMs[reactionTimesMs.length - 1]} ms</span> ({reactionTimesMs.length} taps)
+                      Last tap speed: <span className="text-white">{reactionTimesMs[reactionTimesMs.length - 1]} ms</span> ({reactionTimesMs.length} taps)
                     </div>
                   )}
                 </div>
@@ -495,15 +495,15 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <h3 className="text-sm font-semibold text-white">
-                        Diagnostic Scan Upload &amp; Ultrasound Selector
+                        Upload or Pick a Body Scan Result
                       </h3>
                       <p className="text-xs text-[#8E96AA]">
-                        Visual diagnostic classification updates the anatomical CAD schematic on submission
+                        Picking a scan below updates the interactive body map when you save.
                       </p>
                     </div>
                     <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/15 px-3 py-1.5 text-xs font-medium text-white hover:bg-[#2B7FFF]/25">
                       <Upload className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
-                      <span>Upload Scan</span>
+                      <span>Upload Image</span>
                       <input
                         type="file"
                         accept="image/*"
@@ -517,7 +517,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                     <div className="mt-3 flex items-center gap-3 rounded-[4px] border border-[#232734] bg-[#0D0F15] p-2.5">
                       <img
                         src={uploadedPreviewUrl}
-                        alt="Uploaded diagnostic scan preview"
+                        alt="Uploaded scan preview"
                         className="h-16 w-20 rounded-[2px] object-cover border border-[#232734] shrink-0"
                       />
                       <div className="text-xs min-w-0">
@@ -526,7 +526,7 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                           <span className="truncate">{uploadedImageName}</span>
                         </div>
                         <p className="mt-0.5 text-[#8E96AA]">
-                          Scan attached. Confirm matching diagnostic ultrasound profile below.
+                          Image attached. Choose the matching scan result below.
                         </p>
                       </div>
                     </div>
@@ -555,7 +555,9 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                       >
                         <div className="flex items-center justify-between gap-2 text-[10px] font-mono-tabular">
                           <span className="text-[#8E96AA] truncate">{preset.scanLabel}</span>
-                          <span className={`font-semibold shrink-0 ${sevColor}`}>{preset.severity}</span>
+                          <span className={`font-semibold shrink-0 ${sevColor}`}>
+                            {preset.severity === 'NOMINAL' ? 'NORMAL' : preset.severity}
+                          </span>
                         </div>
                         <div className="mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-white">
                           <Activity className="h-3.5 w-3.5 text-[#2B7FFF] shrink-0" aria-hidden="true" />
@@ -573,14 +575,14 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
 
             <div className="mt-4">
               <label htmlFor="self-check-notes" className="block flight-micro-label">
-                Clinical Observation Notes
+                Health Notes (Optional)
               </label>
               <input
                 id="self-check-notes"
                 type="text"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="e.g., Post-EVA hydration check, mild headache resolved after CO2 scrub"
+                placeholder="e.g., Checked vitals after spacewalk, feeling hydrated"
                 className="mt-1.5 w-full rounded-[4px] border border-[#232734] bg-[#11131A] px-3 py-2 text-xs text-white placeholder:text-[#8E96AA]/60 focus:border-[#2B7FFF] focus:outline-none"
               />
             </div>
@@ -592,8 +594,8 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
               {selectedPreset
                 ? `SCAN: ${selectedPreset.findingTitle}`
                 : calculatedCogScore !== null
-                ? `PVT-B COG SCORE: ${calculatedCogScore}/10`
-                : 'READY FOR INDEXEDDB COMMIT'}
+                ? `FOCUS SCORE: ${calculatedCogScore}/10`
+                : 'READY TO SAVE'}
             </div>
             <div className="flex items-center justify-end gap-2.5 shrink-0">
               <button
@@ -609,10 +611,10 @@ export const SelfCheckModal: React.FC<SelfCheckModalProps> = ({
                 className="flex-1 sm:flex-initial rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/20 px-4 py-2 text-xs font-semibold text-white hover:bg-[#2B7FFF]/30 disabled:opacity-50"
               >
                 {submitting
-                  ? 'UPDATING...'
+                  ? 'SAVING...'
                   : isLinkAvailable
-                  ? 'COMMIT & SYNC'
-                  : 'COMMIT OFFLINE'}
+                  ? 'SAVE & SYNC'
+                  : 'SAVE OFFLINE'}
               </button>
             </div>
           </div>

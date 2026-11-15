@@ -94,7 +94,7 @@ function formatFlightDeckMET(totalSeconds: number): string {
   const rem = totalSeconds % 3600;
   const mins = Math.floor(rem / 60);
   const secs = rem % 60;
-  return `MET ${String(totalHours).padStart(3, '0')}:${String(mins).padStart(
+  return `DAY+HR ${String(totalHours).padStart(3, '0')}:${String(mins).padStart(
     2,
     '0'
   )}:${String(secs).padStart(2, '0')}`;
@@ -298,7 +298,7 @@ export default function App() {
           classes: 'border-[#F59E0B]/60 bg-[#F59E0B]/10 text-[#F59E0B]',
         }
       : {
-          text: '● NOMINAL',
+          text: '● NORMAL',
           classes: 'border-[#10B981]/60 bg-[#10B981]/10 text-[#10B981]',
         };
 
@@ -445,14 +445,14 @@ export default function App() {
                     Astro FIT
                   </span>
                   <span className="hidden sm:inline font-mono-tabular text-[10px] tracking-[0.08em] text-[#8E96AA] truncate">
-                    HRP BIOMEDICAL FLIGHT CONSOLE
+                    ASTRONAUT HEALTH &amp; SAFETY MONITOR
                   </span>
                 </div>
               </div>
 
               {/* Mobile quick posture pill */}
               <div className="flex md:hidden items-center gap-2 font-mono-tabular text-[11px] font-semibold shrink-0">
-                <span className="text-white">{readinessSummary.score}% RDY</span>
+                <span className="text-white">{readinessSummary.score}% READY</span>
                 <span className="inline-flex items-center gap-0.5 text-[#F59E0B]">
                   <Flame className="h-3 w-3" aria-hidden="true" />
                   {displayStreakDays}D
@@ -460,24 +460,24 @@ export default function App() {
               </div>
             </div>
 
-            {/* Flight-Deck Telemetry Strips (MET / Vehicle / Comms / Crew ID) */}
+            {/* Flight-Deck Telemetry Strips (Mission Time / Spacecraft / Signal Delay / Crew Profile) */}
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 sm:flex sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-1.5">
               <div className="flex flex-col min-w-0">
-                <span className="flight-micro-label">Mission Elapsed Time</span>
+                <span className="flight-micro-label">Mission Timer</span>
                 <span className="font-mono-tabular text-[11px] sm:text-xs font-semibold text-white truncate">
                   {metDisplay}
                 </span>
               </div>
 
               <div className="flex flex-col min-w-0 sm:border-l sm:border-[#232734] sm:pl-4">
-                <span className="flight-micro-label">Active Vehicle</span>
+                <span className="flight-micro-label">Spacecraft / Base</span>
                 <span className="font-mono-tabular text-[11px] sm:text-xs font-semibold text-[#E5E7EB] truncate">
                   {consoleMeta.vehicleCallsign}
                 </span>
               </div>
 
               <div className="flex flex-col min-w-0 sm:border-l sm:border-[#232734] sm:pl-4">
-                <span className="flight-micro-label">Comms Latency</span>
+                <span className="flight-micro-label">Earth Signal Delay</span>
                 <span
                   className={`inline-flex items-center gap-1 font-mono-tabular text-[11px] sm:text-xs font-semibold truncate ${
                     activeEnvironment.autonomousModeRequired
@@ -494,10 +494,10 @@ export default function App() {
                 type="button"
                 onClick={() => setIsCrewModalOpen(true)}
                 className="group flex flex-col items-start min-w-0 text-left sm:border-l sm:border-[#232734] sm:pl-4 rounded-[4px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
-                title="Switch crew profile or edit Crew Medical ID"
+                title="Switch astronaut or edit profile"
               >
                 <span className="flight-micro-label group-hover:text-[#2B7FFF] transition-colors">
-                  Crew Medical ID
+                  Astronaut Profile
                 </span>
                 <span className="inline-flex items-center gap-1 max-w-full font-mono-tabular text-[11px] sm:text-xs font-semibold text-[#E5E7EB] group-hover:text-white transition-colors">
                   <span className="truncate">{activeCrewMedicalId}</span>
@@ -506,9 +506,9 @@ export default function App() {
               </button>
 
               <div className="hidden md:flex flex-col border-l border-[#232734] pl-4">
-                <span className="flight-micro-label">System Posture</span>
+                <span className="flight-micro-label">Health &amp; Streak</span>
                 <div className="flex items-center gap-2 font-mono-tabular text-xs font-semibold">
-                  <span className="text-white">{readinessSummary.score}% RDY</span>
+                  <span className="text-white">{readinessSummary.score}% READY</span>
                   <span className="inline-flex items-center gap-1 text-[#F59E0B]">
                     <Flame className="h-3 w-3" aria-hidden="true" />
                     {displayStreakDays}D
@@ -524,7 +524,7 @@ export default function App() {
           <div className="mx-auto flex max-w-[1680px] flex-col gap-2 px-3 py-2 sm:px-6 xl:flex-row xl:items-center xl:justify-between">
             {/* Environment Selector */}
             <div className="flex items-center gap-2 w-full xl:w-auto">
-              <span className="hidden 2xl:inline flight-micro-label mr-1">Environment</span>
+              <span className="hidden 2xl:inline flight-micro-label mr-1">Location</span>
               <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1 rounded-[4px] border border-[#232734] bg-[#090A0F] p-0.5 w-full sm:w-auto">
                 {(Object.keys(MISSION_ENVIRONMENTS) as MissionEnvironmentId[]).map((envKey) => {
                   const env = MISSION_ENVIRONMENTS[envKey];
@@ -550,7 +550,7 @@ export default function App() {
             {/* Scenario Simulator + Action Controls */}
             <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2 shrink-0 w-full xl:w-auto">
               <label htmlFor="scenario-select" className="sr-only">
-                Mission Scenario Simulator
+                Choose Mission Scenario
               </label>
               <select
                 id="scenario-select"
@@ -575,7 +575,7 @@ export default function App() {
                   className="inline-flex items-center justify-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF] px-3 py-2 sm:py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#1E6AE5] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
                 >
                   <ClipboardPlus className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>Log Vitals</span>
+                  <span>Checkup &amp; Log</span>
                 </button>
 
                 <button
@@ -597,7 +597,7 @@ export default function App() {
                       ? 'border-[#2B7FFF] bg-[#2B7FFF]/15 text-[#2B7FFF]'
                       : 'border-[#232734] bg-[#0D0F15] text-[#E5E7EB] hover:border-[#2B7FFF]'
                   }`}
-                  title="Inspect offline IndexedDB telemetry queue"
+                  title="View saved logs and offline sync status"
                 >
                   {isLinkAvailable ? (
                     <Satellite className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
@@ -609,7 +609,7 @@ export default function App() {
                       ? `OFFLINE (${pendingCount})`
                       : pendingCount > 0
                       ? `SYNC (${pendingCount})`
-                      : 'DSN SYNCED'}
+                      : 'DATA SYNCED'}
                   </span>
                 </button>
 
@@ -620,7 +620,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Non-intrusive Offline / Deep-Space Blackout Banner */}
+      {/* Non-intrusive Offline / Signal Blackout Banner */}
       {!isLinkAvailable && (
         <div
           role="status"
@@ -631,8 +631,8 @@ export default function App() {
               <WifiOff className="h-3.5 w-3.5 shrink-0 mt-0.5 sm:mt-0" aria-hidden="true" />
               <span>
                 {!browserOnline
-                  ? 'OFFLINE MODE ACTIVE — Onboard NASA HRP engine & Flight Surgeon cache operating autonomously. Vitals queue in IndexedDB.'
-                  : 'SIMULATED DEEP-SPACE BLACKOUT — Telemetry packets buffering locally in IndexedDB until Earth DSN link restores.'}
+                  ? 'OFFLINE MODE — Health checks and Flight Surgeon guidance still work without internet. New logs are saved on this device.'
+                  : 'SIGNAL BLACKOUT TEST — New health logs are saved locally on this device until Earth connection is restored.'}
               </span>
             </div>
             <button
@@ -640,7 +640,7 @@ export default function App() {
               onClick={() => setIsSyncModalOpen(true)}
               className="font-mono-tabular font-semibold underline hover:text-white"
             >
-              INSPECT QUEUE ({pendingCount})
+              VIEW SAVED LOGS ({pendingCount})
             </button>
           </div>
         </div>
@@ -669,7 +669,7 @@ export default function App() {
                   <span className="hidden sm:inline" aria-hidden="true">|</span>
                   <span className="inline-flex items-center gap-1 font-mono-tabular text-[11px] font-medium text-[#F59E0B]">
                     <ScanLine className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                    <span>{activeScanFinding.scanLabel} ({activeScanFinding.severity})</span>
+                    <span>{activeScanFinding.scanLabel} ({activeScanFinding.severity === 'NOMINAL' ? 'NORMAL' : activeScanFinding.severity})</span>
                   </span>
                 </>
               )}
@@ -680,7 +680,7 @@ export default function App() {
           </div>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono-tabular text-[11px] text-[#8E96AA] shrink-0 border-t border-[#232734] pt-2 lg:border-t-0 lg:pt-0">
             <span>
-              ROUTINE{' '}
+              CHECKLIST{' '}
               <strong className="text-white">
                 {DAILY_ROUTINE_TASKS.filter((t) => completedRoutineIds.includes(t.id)).length}/4
               </strong>
@@ -688,8 +688,8 @@ export default function App() {
             <span aria-hidden="true">|</span>
             <span>
               {selectedDayIndex !== null
-                ? `INSPECTING DAY ${selectedDayIndex + 1}/14`
-                : 'LIVE TRIGGER TELEMETRY'}
+                ? `VIEWING DAY ${selectedDayIndex + 1}/14`
+                : 'LIVE READINGS'}
             </span>
           </div>
         </div>

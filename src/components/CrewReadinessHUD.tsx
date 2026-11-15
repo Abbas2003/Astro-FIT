@@ -71,12 +71,12 @@ export const CrewReadinessHUD: React.FC<CrewReadinessHUDProps> = ({
           </div>
 
           <div className="min-w-0">
-            <div className="flight-micro-label">Mission Readiness</div>
+            <div className="flight-micro-label">Crew Health Score</div>
             <div className={`mt-0.5 text-base font-semibold ${scoreTone.text} truncate`}>
               {readiness.tierLabel}
             </div>
             <div className="font-mono-tabular text-[11px] text-[#8E96AA]">
-              Routine: {readiness.routineCompletionRatio} complete
+              Daily Checklist: {readiness.routineCompletionRatio} done
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@ export const CrewReadinessHUD: React.FC<CrewReadinessHUDProps> = ({
             <span>{streakDays}D STREAK</span>
           </div>
           <span className="mt-1 font-mono-tabular text-[10px] text-[#8E96AA]">
-            {readiness.allRoutineDone ? 'STREAK +1 LOGGED' : '4/4 EXTENDS STREAK'}
+            {readiness.allRoutineDone ? '+1 DAY ADDED' : 'FINISH 4/4 FOR +1 DAY'}
           </span>
         </div>
       </div>
@@ -98,10 +98,10 @@ export const CrewReadinessHUD: React.FC<CrewReadinessHUDProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 flight-micro-label">
             <ShieldCheck className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
-            <span>Daily Mission Routine</span>
+            <span>Daily Health Checklist</span>
           </div>
           <span className="font-mono-tabular text-[10px] text-[#8E96AA]">
-            MITIGATES CAUTION
+            HELPS FIX WARNINGS
           </span>
         </div>
 

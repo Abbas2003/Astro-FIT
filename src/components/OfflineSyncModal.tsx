@@ -68,10 +68,10 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
         <div className="flex items-center justify-between gap-3 border-b border-[#232734] px-4 py-3 sm:px-6 sm:py-4">
           <div className="min-w-0">
             <div className="flight-micro-label truncate">
-              IndexedDB Buffer · {crewLabel}
+              Saved on Device · {crewLabel}
             </div>
             <h2 id="offline-sync-title" className="mt-0.5 text-sm sm:text-base font-semibold text-white truncate">
-              Deep-Space Offline Store &amp; Sync Queue
+              Offline Health Logs &amp; Sync
             </h2>
           </div>
           <button
@@ -95,10 +95,10 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
               )}
               <span className="font-mono-tabular font-medium text-white break-words">
                 {isLinkAvailable
-                  ? 'DSN TELEMETRY LINK AVAILABLE'
+                  ? 'EARTH CONNECTION ACTIVE'
                   : !browserOnline
-                  ? 'OFFLINE MODE — LOCAL CACHE ACTIVE'
-                  : 'SIMULATED CONJUNCTION BLACKOUT — QUEUEING'}
+                  ? 'OFFLINE — SAVED ON DEVICE'
+                  : 'SIGNAL LOSS TEST — SAVING OFFLINE'}
               </span>
             </div>
 
@@ -111,15 +111,15 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
                   : 'border-[#232734] bg-[#11131A] text-[#E5E7EB] hover:border-[#2B7FFF]'
               }`}
             >
-              {simulateBlackout ? 'RESTORE DSN LINK' : 'SIMULATE BLACKOUT'}
+              {simulateBlackout ? 'RECONNECT SIGNAL' : 'TEST OFFLINE MODE'}
             </button>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 text-xs text-[#8E96AA]">
             <div className="font-mono-tabular">
-              QUEUED: <strong className="text-white">{pendingCount}</strong>
+              WAITING TO SYNC: <strong className="text-white">{pendingCount}</strong>
               <span className="mx-2 text-[#3B4254]">·</span>
-              TOTAL: <strong className="text-white">{logs.length}</strong>
+              TOTAL LOGS: <strong className="text-white">{logs.length}</strong>
               {lastSyncedAtIso && (
                 <>
                   <span className="mx-2 text-[#3B4254]">·</span>
@@ -136,7 +136,7 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
                 className="inline-flex items-center justify-center gap-1.5 rounded-[4px] border border-[#232734] bg-[#11131A] px-3 py-1.5 text-xs font-medium text-[#E5E7EB] hover:border-[#2B7FFF] disabled:opacity-40"
               >
                 <Download className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>Export JSON</span>
+                <span>Download JSON</span>
               </button>
               <button
                 type="button"
@@ -148,7 +148,7 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
                   className={`h-3.5 w-3.5 text-[#2B7FFF] ${isSyncing ? 'animate-spin' : ''}`}
                   aria-hidden="true"
                 />
-                <span>{isSyncing ? 'TRANSMITTING...' : 'SYNC QUEUE'}</span>
+                <span>{isSyncing ? 'SYNCING...' : 'SYNC NOW'}</span>
               </button>
             </div>
           </div>
@@ -158,7 +158,7 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
         <div className="flex-1 overflow-y-auto bg-[#090A0F] px-4 py-4 sm:px-6">
           {logs.length === 0 ? (
             <div className="rounded-[4px] border border-dashed border-[#232734] py-10 px-4 text-center text-xs text-[#8E96AA]">
-              No telemetry checkpoints logged for {crewLabel}. Submit a vitals reading to inspect IndexedDB queueing.
+              No health logs saved for {crewLabel} yet. Save a vitals reading to see how offline storage works.
             </div>
           ) : (
             <div className="space-y-2">
@@ -189,11 +189,11 @@ export const OfflineSyncModal: React.FC<OfflineSyncModalProps> = ({
                           isPending ? 'text-[#F59E0B]' : 'text-[#10B981]'
                         }`}
                       >
-                        {isPending ? '▲ QUEUED OFFLINE' : '● SYNCED'}
+                        {isPending ? '▲ SAVED OFFLINE' : '● SYNCED'}
                       </span>
                     </div>
                     <div className="mt-1.5 font-mono-tabular text-[#E5E7EB] break-words">
-                      HR {entry.readings.heartRate} bpm · BP {entry.readings.systolicBP}/{entry.readings.diastolicBP} mmHg · RAD {entry.readings.cumulativeRadiation.toFixed(1)} mSv · SLEEP {entry.readings.sleepHours.toFixed(1)}h · COG {entry.readings.moodCognitiveScore.toFixed(1)}/10
+                      HR {entry.readings.heartRate} bpm · BP {entry.readings.systolicBP}/{entry.readings.diastolicBP} mmHg · RAD {entry.readings.cumulativeRadiation.toFixed(1)} mSv · SLEEP {entry.readings.sleepHours.toFixed(1)}h · FOCUS {entry.readings.moodCognitiveScore.toFixed(1)}/10
                     </div>
                     {entry.notes && (
                       <p className="mt-1 text-[#8E96AA] break-words">{entry.notes}</p>

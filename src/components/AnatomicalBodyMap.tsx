@@ -36,7 +36,7 @@ const STATUS_SPEC: Record<
     border: 'border-[#10B981]',
     badgeBg: 'bg-[#10B981]/15',
     badgeText: 'text-[#10B981]',
-    label: 'NOMINAL',
+    label: 'NORMAL',
   },
   CAUTION: {
     stroke: '#F59E0B',
@@ -76,18 +76,18 @@ interface HotspotNodeMeta {
 const HOTSPOT_CALLOUTS: HotspotNodeMeta[] = [
   {
     id: 'neuro_behavioral',
-    code: 'SYS-01 // CRANIAL',
+    code: 'HEAD & MIND',
     side: 'left',
     anchorY: 'top-[6%]',
     keyMetricLabel: (sys) => {
       const sleep = sys.biomarkers.find((b) => b.key === 'sleepHours');
       const mood = sys.biomarkers.find((b) => b.key === 'moodCognitiveScore');
-      return `${sleep?.value.toFixed(1) ?? '--'} hrs · ${mood?.value.toFixed(1) ?? '--'}/10`;
+      return `${sleep?.value.toFixed(1) ?? '--'} hrs sleep · ${mood?.value.toFixed(1) ?? '--'}/10`;
     },
   },
   {
     id: 'cardiovascular',
-    code: 'SYS-02 // THORAX',
+    code: 'HEART & BLOOD',
     side: 'right',
     anchorY: 'top-[22%]',
     keyMetricLabel: (sys) => {
@@ -99,17 +99,17 @@ const HOTSPOT_CALLOUTS: HotspotNodeMeta[] = [
   },
   {
     id: 'musculoskeletal',
-    code: 'SYS-03 // AXIAL',
+    code: 'BONES & MUSCLES',
     side: 'left',
     anchorY: 'top-[58%]',
     keyMetricLabel: (sys) => {
       const bone = sys.biomarkers.find((b) => b.key === 'boneDensityIndex');
-      return `BMD ${bone?.value.toFixed(2) ?? '--'} T`;
+      return `Bone ${bone?.value.toFixed(2) ?? '--'}`;
     },
   },
   {
     id: 'radiation_immune',
-    code: 'SYS-04 // DOSIMETRY',
+    code: 'SHIELD & IMMUNE',
     side: 'right',
     anchorY: 'top-[62%]',
     keyMetricLabel: (sys) => {
@@ -140,13 +140,13 @@ export const AnatomicalBodyMap: React.FC<AnatomicalBodyMapProps> = ({
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#232734] pb-3">
         <div>
-          <div className="flight-micro-label">Biomedical CAD Schematic · Anatomical Mapping</div>
+          <div className="flight-micro-label">Interactive Body Map · Tap Any Area</div>
           <h2 className="mt-0.5 text-sm font-semibold text-white">
-            Physiological Telemetry Wireframe
+            Body Systems Health Check
           </h2>
         </div>
         <div className="flex flex-wrap items-center gap-3 font-mono-tabular text-[10px] sm:text-[11px]">
-          <span className="text-[#10B981]">● NOMINAL</span>
+          <span className="text-[#10B981]">● NORMAL</span>
           <span className="text-[#F59E0B]">▲ CAUTION</span>
           <span className="text-[#EF4444]">✖ CRITICAL</span>
         </div>
@@ -156,10 +156,10 @@ export const AnatomicalBodyMap: React.FC<AnatomicalBodyMapProps> = ({
       <div className="relative my-3 flex w-full flex-1 items-center justify-center min-h-[300px] sm:min-h-[390px] xl:min-h-[410px] rounded-[4px] border border-[#232734] cad-grid-bg overflow-hidden px-2 py-6 sm:py-4">
         {/* Corner Coordinate Markers */}
         <div className="pointer-events-none absolute top-2 left-2.5 font-mono-tabular text-[9px] sm:text-[10px] text-[#8E96AA]">
-          REF // ANAT-CAD-01
+          BODY SCAN VIEW
         </div>
         <div className="pointer-events-none absolute top-2 right-2.5 font-mono-tabular text-[9px] sm:text-[10px] text-[#8E96AA]">
-          AXIS: SAGITTAL +0.00
+          TAP A SYSTEM FOR GUIDE
         </div>
 
         {/* Tablet & Desktop Floating System Telemetry Readouts */}

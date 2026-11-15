@@ -46,7 +46,7 @@ const STATUS_STYLE: Record<
     border: 'border-[#232734] hover:border-[#3B4254]',
     text: 'text-[#10B981]',
     glyph: '●',
-    label: 'NOMINAL',
+    label: 'NORMAL',
   },
   CAUTION: {
     border: 'border-[#F59E0B]/60',
@@ -80,12 +80,12 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
     e.preventDefault();
     setSaving(true);
     try {
-      await onLogTelemetry(logNotes.trim() || 'Routine crew self-logged telemetry checkpoint');
+      await onLogTelemetry(logNotes.trim() || 'Routine daily health log');
       setLogNotes('');
       setLogFeedback(
         isLinkAvailable
-          ? 'Saved locally & synced to Mission Control'
-          : 'Saved offline in IndexedDB queue'
+          ? 'Saved and synced with Mission Control'
+          : 'Saved offline on this device (will sync later)'
       );
       setTimeout(() => setLogFeedback(null), 3500);
     } finally {
@@ -97,11 +97,11 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
     <aside className="flex flex-col rounded-[6px] border border-[#232734] bg-[#11131A] p-3.5 sm:p-4 h-full">
       <div className="flex items-center justify-between gap-2 border-b border-[#232734] pb-3">
         <div>
-          <div className="flight-micro-label">Sensor Channels · 9 Inputs</div>
+          <div className="flight-micro-label">Test Vitals · 9 Body Sensors</div>
           <div className="mt-0.5 flex items-center gap-2">
             <SlidersHorizontal className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
             <h2 className="text-sm font-semibold text-white">
-              Biomarker Telemetry
+              Live Body Vitals
             </h2>
           </div>
         </div>
@@ -152,7 +152,7 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
                   </span>
                 </div>
                 <span className="font-mono-tabular text-[10px] text-[#8E96AA]">
-                  NOM {ev.nominalRangeText}
+                  Normal: {ev.nominalRangeText}
                 </span>
               </div>
 
@@ -180,8 +180,8 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
           type="text"
           value={logNotes}
           onChange={(e) => setLogNotes(e.target.value)}
-          placeholder="Crew annotation (e.g. Post-ARED / EVA)"
-          aria-label="Crew telemetry log note"
+          placeholder="Add a note (e.g. After spacewalk or workout)"
+          aria-label="Health log note"
           className="w-full rounded-[4px] border border-[#232734] bg-[#090A0F] px-3 py-2 sm:py-1.5 text-xs text-white placeholder:text-[#8E96AA]/60 focus:border-[#2B7FFF] focus:outline-none"
         />
         <button
@@ -192,10 +192,10 @@ export const BiomarkerControlPanel: React.FC<BiomarkerControlPanelProps> = ({
           <Save className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
           <span>
             {saving
-              ? 'RECORDING...'
+              ? 'SAVING...'
               : isLinkAvailable
-              ? 'LOG VITALS & SYNC'
-              : 'LOG TO OFFLINE QUEUE'}
+              ? 'SAVE HEALTH LOG'
+              : 'SAVE LOG OFFLINE'}
           </span>
         </button>
         {logFeedback && (

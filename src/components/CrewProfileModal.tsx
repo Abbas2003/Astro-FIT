@@ -140,21 +140,21 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
         <div className="flex items-center justify-between gap-3 border-b border-[#232734] px-4 py-3 sm:px-6 sm:py-4">
           <div className="min-w-0">
             <div className="flight-micro-label truncate">
-              Crew Manifest · Isolated Biomedical Profiles
+              Crew Switcher · Separate Health Profiles
             </div>
             <h2
               id="crew-profile-modal-title"
               className="mt-0.5 flex items-center gap-2 text-sm sm:text-base font-semibold text-white truncate"
             >
               <Users className="h-4 w-4 text-[#2B7FFF] shrink-0" aria-hidden="true" />
-              <span>Crew Medical ID &amp; Roster</span>
+              <span>Astronaut Profiles</span>
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-1.5 text-[#8E96AA] hover:border-[#2B7FFF] hover:text-white shrink-0"
-            aria-label="Close Crew Medical ID modal"
+            aria-label="Close astronaut profiles modal"
           >
             <X className="h-4 w-4" />
           </button>
@@ -164,10 +164,10 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
         <div className="flex items-center justify-between gap-2 border-b border-[#232734] bg-[#0D0F15] px-4 py-2.5 sm:px-6">
           <span className="font-mono-tabular text-[11px] text-[#8E96AA]">
             {mode === 'roster'
-              ? `${roster.length} REGISTERED ASTRONAUT${roster.length > 1 ? 'S' : ''}`
+              ? `${roster.length} ASTRONAUT${roster.length > 1 ? 'S' : ''} IN CREW`
               : mode === 'create'
-              ? 'REGISTER NEW CREW BIO-PROFILE'
-              : 'EDIT CREW BIO-PROFILE'}
+              ? 'ADD NEW ASTRONAUT'
+              : 'EDIT ASTRONAUT PROFILE'}
           </span>
           {mode === 'roster' ? (
             <button
@@ -176,7 +176,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
               className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF]/15 px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#2B7FFF]/25 whitespace-nowrap"
             >
               <Plus className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
-              <span>Add Custom Crew</span>
+              <span>Add Astronaut</span>
             </button>
           ) : (
             <button
@@ -184,7 +184,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
               onClick={() => setMode('roster')}
               className="rounded-[4px] border border-[#232734] bg-[#11131A] px-3 py-1.5 text-xs font-medium text-[#8E96AA] hover:text-white"
             >
-              Back to Roster
+              Back to List
             </button>
           )}
         </div>
@@ -194,7 +194,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
           {mode === 'roster' ? (
             <div className="space-y-2.5">
               <p className="text-xs text-[#8E96AA]">
-                Each crew profile maintains separate biomarker vitals, daily routine streaks, ultrasound scans, and IndexedDB telemetry logs.
+                Each astronaut keeps their own separate vitals, daily checklist streak, scan results, and saved health logs.
               </p>
 
               {roster.map((profile) => {
@@ -273,7 +273,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="rounded-[4px] border border-[#232734] bg-[#11131A] p-3">
-                <div className="flight-micro-label">Console Readout Preview</div>
+                <div className="flight-micro-label">Header Badge Preview</div>
                 <div className="mt-1 font-mono-tabular text-sm font-semibold text-[#2B7FFF]">
                   {previewLabel}
                 </div>
@@ -282,7 +282,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label htmlFor="crew-rank" className="block flight-micro-label">
-                    Rank / Callsign
+                    Rank / Title
                   </label>
                   <input
                     id="crew-rank"
@@ -298,7 +298,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
 
                 <div>
                   <label htmlFor="crew-bio-id" className="block flight-micro-label">
-                    Biometric ID Tag
+                    ID Badge Number
                   </label>
                   <input
                     id="crew-bio-id"
@@ -330,7 +330,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
 
                 <div className="sm:col-span-2">
                   <label htmlFor="crew-role" className="block flight-micro-label">
-                    Flight Role / Specialty
+                    Mission Role
                   </label>
                   <input
                     id="crew-role"
@@ -338,7 +338,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
                     maxLength={40}
                     value={roleTitle}
                     onChange={(e) => setRoleTitle(e.target.value)}
-                    placeholder="e.g. Payload & EVA Specialist"
+                    placeholder="e.g. Spacewalk & Science Specialist"
                     className="mt-1.5 w-full rounded-[4px] border border-[#232734] bg-[#11131A] px-3 py-2 text-xs text-white focus:border-[#2B7FFF] focus:outline-none"
                   />
                 </div>
@@ -347,7 +347,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
                   <>
                     <div>
                       <label htmlFor="crew-scenario" className="block flight-micro-label">
-                        Initial Telemetry Baseline
+                        Starting Mission Scenario
                       </label>
                       <select
                         id="crew-scenario"
@@ -365,7 +365,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
 
                     <div>
                       <label htmlFor="crew-streak" className="block flight-micro-label">
-                        Initial Health Streak (Days)
+                        Starting Streak (Days)
                       </label>
                       <input
                         id="crew-streak"
@@ -394,7 +394,7 @@ export const CrewProfileModal: React.FC<CrewProfileModalProps> = ({
                   className="inline-flex items-center gap-1.5 rounded-[4px] border border-[#2B7FFF] bg-[#2B7FFF] px-4 py-2 text-xs font-semibold text-white hover:bg-[#1E6AE5]"
                 >
                   <Check className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>{mode === 'create' ? 'Create & Activate Crew' : 'Save Changes'}</span>
+                  <span>{mode === 'create' ? 'Save & Switch' : 'Save Changes'}</span>
                 </button>
               </div>
             </form>

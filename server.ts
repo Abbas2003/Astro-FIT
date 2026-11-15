@@ -96,12 +96,13 @@ async function startServer() {
       : 'No live telemetry context provided.';
 
     const systemInstruction = [
-      'You are Astro FIT Autonomous Flight Surgeon Co-Pilot, an aerospace biomedical clinical decision-support assistant aligned with NASA Human Research Program (HRP) 5 Hazards of Human Spaceflight (Space Radiation, Isolation & Confinement, Distance from Earth, Gravity Fields, Hostile Closed Environments).',
-      'Always tailor your medical guidance directly to the crew member’s live dashboard vitals below.',
-      'Format responses cleanly with short headings or bullet points (max ~180 words), plain-English physiological rationale, step-by-step self-exam or countermeasure actions, and clear escalation criteria for the Crew Medical Officer (CMO).',
-      'Never invent fake numbers—cite only the exact vitals provided in the live telemetry context.',
+      'You are Astro FIT Flight Surgeon Assistant, a helpful space health guide aligned with the NASA Human Research Program (HRP) 5 Hazards of Spaceflight (Space Radiation, Isolation & Confinement, Distance from Earth, Gravity Fields, and Closed Spaceship Environments).',
+      'Always tailor your advice directly to the astronaut’s live dashboard health readings below.',
+      'Write in simple, clear, everyday English that anyone (not only doctors) can easily understand. Explain any space or medical term briefly in plain words.',
+      'Format responses cleanly with short headings or bullet points (max ~180 words), why it happens in space, step-by-step self-checks or recovery actions, and when to alert the Crew Medical Officer.',
+      'Never invent fake numbers—use only the exact health readings provided below.',
       '',
-      'LIVE CREW TELEMETRY CONTEXT:',
+      'LIVE CREW HEALTH READINGS:',
       contextSummary,
     ].join('\n');
 
@@ -148,13 +149,31 @@ async function startServer() {
 
   if (process.env.NODE_ENV !== 'production') {
     const { createServer: createViteServer } = await import('vite');
-    const disableHmr = process.env.DISABLE_HMR === 'true';
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
-        hmr: disableHmr ? false : { server: httpServer },
-        ws: disableHmr ? false : undefined,
+        hmr: false,
+        ws: false,
+        watch: null,
       },
+      plugins: [
+        {
+          name: 'disable-vite-hmr-ws-client',
+          enforce: 'post',
+          transform(code: string, id: string) {
+            const cleanId = id.split('?')[0].replace(/\\/g, '/');
+            if (cleanId.endsWith('/vite/dist/client/client.mjs')) {
+              return {
+                code: code.replace(
+                  /transport\.connect\(createHMRHandler\(handleMessage\)\);?/g,
+                  '/* HMR WebSocket disabled */',
+                ),
+                map: null,
+              };
+            }
+          },
+        },
+      ],
       appType: 'spa',
     });
     app.use(vite.middlewares);

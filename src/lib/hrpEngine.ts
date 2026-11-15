@@ -192,23 +192,23 @@ export const BIOMARKER_HAZARD_MAP: Record<BiomarkerKey, NasaHazard[]> = {
 
 export const BIOMARKER_SPACE_EXPLANATIONS: Record<BiomarkerKey, string> = {
   heartRate:
-    'In microgravity and partial gravity, central fluid shifts and cardiovascular deconditioning alter resting vagal tone and elevate exertional heart rate during EVA or resistive training.',
+    'In low or zero gravity, your heart does not have to pump as hard against gravity, which slowly weakens heart fitness and can make your pulse race during spacewalks or exercise.',
   systolicBP:
-    'Cephalad fluid redistribution in 0g reduces plasma volume by 10–15%, raising orthostatic intolerance risk upon gravity transitions or during high-workload EVA.',
+    'Without gravity pulling blood down, fluids shift toward your head and chest and overall blood volume drops 10–15%. This can cause dizzy spells or blood pressure swings.',
   diastolicBP:
-    'Vascular resistance adapts continuously to reduced hydrostatic gradients; elevated diastolic pressure indicates sympathetic stress, dehydration, or CO2 retention.',
+    'Resting blood vessel pressure shifts as your body adjusts to weightlessness. Higher readings can point to stress, dehydration, or stale cabin air (high CO2).',
   bloodGlucose:
-    'Microgravity-induced insulin resistance and altered hepatic metabolism can destabilize glycemic control, impairing cognitive stamina and EVA endurance.',
+    'Living in weightlessness changes how your body handles sugar and insulin. Unsteady blood sugar can drain your energy and focus during long spacewalks.',
   bodyTemp:
-    'Closed-loop cabin thermal loads and impaired convective sweat evaporation in spaceflight can mask early febrile immune responses or heat-stress buildup inside EVA suits.',
+    'Because sweat does not drip or evaporate well in zero gravity, body heat builds up quickly inside spacesuits and can hide early signs of fever or overheating.',
   sleepHours:
-    'Without terrestrial 24-hour solar cues—and under cabin noise, CO2 fluctuations, and operational shifts—circadian misalignment rapidly degrades executive accuracy.',
+    'With 16 sunrises a day or total deep-space darkness—plus noisy fans and shifting schedules—astronauts easily lose sleep, which hurts focus and reaction speed.',
   cumulativeRadiation:
-    'Outside Earth’s magnetosphere, Galactic Cosmic Rays (GCR) and Solar Particle Events (SPE) inflict cumulative DNA double-strand breaks and hematopoietic suppression.',
+    'Outside Earth’s magnetic shield, solar flares and cosmic rays pass through ship walls and slowly raise lifetime radiation dose, stressing blood and immune cells.',
   boneDensityIndex:
-    'Mechanical unloading in microgravity accelerates osteoclastic bone resorption (~1–1.5% per month without ARED countermeasures), elevating fracture and renal stone risk.',
+    'Without gravity pushing on your legs and spine, bones lose 1% to 1.5% of their strength each month unless you do daily heavy resistance workouts.',
   moodCognitiveScore:
-    'Extended Earth-out-of-view confinement and 20-minute comms delays increase psychosocial strain, monotony fatigue, and crew coordination friction.',
+    'Months inside a small cabin far from Earth—with up to 20-minute message delays—can cause stress, boredom, low mood, and slower decision-making.',
 };
 
 function createBaselines(overrides: Partial<Record<BiomarkerKey, Partial<ThresholdRange>>>): Record<BiomarkerKey, ThresholdRange> {
@@ -223,7 +223,7 @@ function createBaselines(overrides: Partial<Record<BiomarkerKey, Partial<Thresho
       cautionMax: 102,
     },
     systolicBP: {
-      label: 'Systolic BP',
+      label: 'Blood Pressure (Top)',
       unit: 'mmHg',
       precision: 0,
       nominalMin: 98,
@@ -232,7 +232,7 @@ function createBaselines(overrides: Partial<Record<BiomarkerKey, Partial<Thresho
       cautionMax: 142,
     },
     diastolicBP: {
-      label: 'Diastolic BP',
+      label: 'Blood Pressure (Bottom)',
       unit: 'mmHg',
       precision: 0,
       nominalMin: 60,
@@ -241,7 +241,7 @@ function createBaselines(overrides: Partial<Record<BiomarkerKey, Partial<Thresho
       cautionMax: 90,
     },
     bloodGlucose: {
-      label: 'Blood Glucose',
+      label: 'Blood Sugar',
       unit: 'mg/dL',
       precision: 0,
       nominalMin: 74,
@@ -268,7 +268,7 @@ function createBaselines(overrides: Partial<Record<BiomarkerKey, Partial<Thresho
       cautionMax: 9.8,
     },
     cumulativeRadiation: {
-      label: 'Cumulative Radiation',
+      label: 'Total Radiation Dose',
       unit: 'mSv',
       precision: 1,
       nominalMin: 0,
@@ -277,7 +277,7 @@ function createBaselines(overrides: Partial<Record<BiomarkerKey, Partial<Thresho
       cautionMax: 120,
     },
     boneDensityIndex: {
-      label: 'Bone Density Index',
+      label: 'Bone Strength Score',
       unit: 'T-score',
       precision: 2,
       nominalMin: -0.8,
@@ -286,7 +286,7 @@ function createBaselines(overrides: Partial<Record<BiomarkerKey, Partial<Thresho
       cautionMax: 2.5,
     },
     moodCognitiveScore: {
-      label: 'Mood / Cognitive Score',
+      label: 'Mood & Focus Score',
       unit: '/10',
       precision: 1,
       nominalMin: 7.0,
@@ -309,15 +309,15 @@ function createBaselines(overrides: Partial<Record<BiomarkerKey, Partial<Thresho
 export const MISSION_ENVIRONMENTS: Record<MissionEnvironmentId, MissionEnvironmentProfile> = {
   iss_orbit: {
     id: 'iss_orbit',
-    name: 'ISS Orbital Station',
+    name: 'ISS Space Station',
     shortName: 'ISS Orbit',
-    orbitOrLocation: 'Low Earth Orbit · 408 km',
+    orbitOrLocation: 'Orbiting Earth · 408 km up',
     gravityG: 0.0,
-    gravityLabel: '0.00 g (Microgravity)',
+    gravityLabel: '0.00 g (Weightless)',
     earthDelaySeconds: 0.4,
-    earthDelayLabel: '0.4s TDRS Link',
+    earthDelayLabel: '0.4s Live Link',
     autonomousModeRequired: false,
-    cabinAtmosphere: '101.3 kPa · 21% O2 · ppCO2 2.4 mmHg',
+    cabinAtmosphere: 'Earth-normal air · 21% O2 · Clean CO2',
     primaryHazards: ['Gravity Fields', 'Hostile Closed Environments', 'Space Radiation'],
     baselines: createBaselines({
       cumulativeRadiation: { nominalMax: 45, cautionMax: 100 },
@@ -326,15 +326,15 @@ export const MISSION_ENVIRONMENTS: Record<MissionEnvironmentId, MissionEnvironme
   },
   mars_transit: {
     id: 'mars_transit',
-    name: 'Mars Deep-Space Transit',
+    name: 'Mars Deep-Space Ship',
     shortName: 'Mars Transit',
-    orbitOrLocation: 'Heliocentric Cruise · 1.42 AU',
+    orbitOrLocation: 'Deep Space Cruise · Far from Earth',
     gravityG: 0.0,
-    gravityLabel: '0.00 g (Microgravity)',
+    gravityLabel: '0.00 g (Weightless)',
     earthDelaySeconds: 1122, // 18m 42s one-way light delay
     earthDelayLabel: '18m 42s Delay',
     autonomousModeRequired: true,
-    cabinAtmosphere: '70.3 kPa · 26.5% O2 · ppCO2 3.1 mmHg',
+    cabinAtmosphere: 'Cabin air · 26.5% O2 · Slightly higher CO2',
     primaryHazards: [
       'Distance from Earth',
       'Space Radiation',
@@ -351,15 +351,15 @@ export const MISSION_ENVIRONMENTS: Record<MissionEnvironmentId, MissionEnvironme
   },
   lunar_base: {
     id: 'lunar_base',
-    name: 'Lunar Surface Base',
+    name: 'Moon Surface Base',
     shortName: 'Lunar Base',
-    orbitOrLocation: 'Shackleton Rim · South Pole',
+    orbitOrLocation: 'Moon South Pole · Shackleton Crater',
     gravityG: 0.16,
-    gravityLabel: '0.16 g (Lunar Partial)',
+    gravityLabel: '0.16 g (Moon Gravity)',
     earthDelaySeconds: 1.3,
-    earthDelayLabel: '1.3s Direct Link',
+    earthDelayLabel: '1.3s Fast Link',
     autonomousModeRequired: false,
-    cabinAtmosphere: '56.5 kPa · 34% O2 · Regolith Filtration Active',
+    cabinAtmosphere: 'Base air · 34% O2 · Moon Dust Filters On',
     primaryHazards: ['Gravity Fields', 'Space Radiation', 'Hostile Closed Environments'],
     baselines: createBaselines({
       heartRate: { nominalMin: 55, nominalMax: 96, cautionMin: 48, cautionMax: 112 },
@@ -370,15 +370,15 @@ export const MISSION_ENVIRONMENTS: Record<MissionEnvironmentId, MissionEnvironme
   },
   pressurized_rover: {
     id: 'pressurized_rover',
-    name: 'Pressurized Rover',
+    name: 'Moon / Mars Rover',
     shortName: 'Pressurized Rover',
-    orbitOrLocation: 'Mobile Surface Traverse · Mare Tranquillitatis',
+    orbitOrLocation: 'Mobile Surface Drive · Exploration Zone',
     gravityG: 0.16,
-    gravityLabel: '0.16 g (Mobile Traverse)',
+    gravityLabel: '0.16 g (Rover Drive)',
     earthDelaySeconds: 3.8,
-    earthDelayLabel: '3.8s Relay Hop',
+    earthDelayLabel: '3.8s Relay Link',
     autonomousModeRequired: true,
-    cabinAtmosphere: '55.2 kPa · 32% O2 · Compact ECLSS Loop',
+    cabinAtmosphere: 'Compact rover air · 32% O2 · Recycled Air',
     primaryHazards: ['Hostile Closed Environments', 'Isolation & Confinement', 'Space Radiation', 'Gravity Fields'],
     baselines: createBaselines({
       heartRate: { nominalMin: 56, nominalMax: 98, cautionMin: 48, cautionMax: 114 },
@@ -422,8 +422,8 @@ function buildSystemCountermeasures(
 ): CountermeasureAction[] {
   const actions: CountermeasureAction[] = [];
   const autonomousNote = env.autonomousModeRequired
-    ? `Execute locally without waiting for Flight Surgeon confirmation (${env.earthDelayLabel} one-way Earth light lag).`
-    : `Log execution to onboard EHR and sync with Mission Control Flight Surgeon (${env.earthDelayLabel}).`;
+    ? `Start right away without waiting for Earth (${env.earthDelayLabel} signal delay).`
+    : `Log completion to health records and share with Earth doctors (${env.earthDelayLabel}).`;
 
   if (systemId === 'neuro_behavioral') {
     const sleep = evals.sleepHours;
@@ -432,13 +432,13 @@ function buildSystemCountermeasures(
     if (sleep.status !== 'NOMINAL') {
       actions.push({
         id: 'nb-circadian-light',
-        title: 'Circadian Solid-State Light Therapy (480 nm)',
+        title: 'Morning Blue Light Therapy & Sleep Reset',
         priority: sleep.status === 'CRITICAL' ? 'IMMEDIATE' : 'ELEVATED',
         category: 'Circadian & Behavioral',
-        protocolCode: 'HRP-SLEEP-04',
+        protocolCode: 'SLEEP-04',
         instruction:
-          'Initiate 45 minutes of high-melanopic blue-enriched cabin lighting at wake cycle; dim quarters to <10 lux 2 hours pre-sleep and verify cabin ppCO2 < 2.5 mmHg.',
-        targetDurationOrDose: '45 min wake-pulse · 0.5 mg melatonin PRN',
+          'Sit in bright blue-enriched cabin light for 45 minutes when waking up. Dim sleep quarters 2 hours before bed and make sure cabin CO2 is low.',
+        targetDurationOrDose: '45 min morning light · dim room at night',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -446,13 +446,13 @@ function buildSystemCountermeasures(
     if (mood.status !== 'NOMINAL') {
       actions.push({
         id: 'nb-pvt-decompression',
-        title: 'Cognitive Load Shedding & Asynchronous Behavioral Support',
+        title: 'Lighter Schedule & Family Check-In',
         priority: mood.status === 'CRITICAL' ? 'IMMEDIATE' : 'ELEVATED',
         category: 'Circadian & Behavioral',
-        protocolCode: 'HRP-BMed-12',
+        protocolCode: 'MIND-12',
         instruction:
-          'Defer non-critical science payload tasks for 24 hours. Complete 3-minute Psychomotor Vigilance Test (PVT-B) and run private Earth family video-journal downlink.',
-        targetDurationOrDose: '24h workload reduction · 1x PVT-B baseline',
+          'Pause non-urgent science tasks for 24 hours. Take the 15-second Focus Test and record a private video message to send home to family.',
+        targetDurationOrDose: '24h lighter workload · 1x Focus Test',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -460,13 +460,13 @@ function buildSystemCountermeasures(
     if (status === 'CRITICAL') {
       actions.push({
         id: 'nb-cmo-neuro',
-        title: 'Crew Medical Officer (CMO) Neuro-Cognitive Escalation',
+        title: 'Pause Spacewalks & Alert Crew Medical Officer',
         priority: 'IMMEDIATE',
         category: 'Medical Officer Escalation',
-        protocolCode: 'CMO-NEURO-01',
+        protocolCode: 'MED-NEURO-01',
         instruction:
-          'Restrict autonomous rover/EVA operations until sleep debt recovers >6.5 hrs and PVT-B reaction lapses return below threshold. Crewmate buddy-check every 6 hours.',
-        targetDurationOrDose: 'Immediate EVA stand-down',
+          'Hold off on rover driving or spacewalks until sleep reaches 6.5+ hours and focus test speed recovers. Have a crewmate check in every 6 hours.',
+        targetDurationOrDose: 'Pause spacewalks until rested',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -474,13 +474,13 @@ function buildSystemCountermeasures(
     if (actions.length === 0) {
       actions.push({
         id: 'nb-routine',
-        title: 'Maintain Fixed Circadian Lighting & Weekly PVT-B',
+        title: 'Keep Regular Sleep Schedule & Weekly Focus Check',
         priority: 'ROUTINE',
         category: 'Circadian & Behavioral',
-        protocolCode: 'HRP-SLEEP-01',
+        protocolCode: 'SLEEP-01',
         instruction:
-          'Continue scheduled light-dark photoperiods and standard pre-sleep thermal regulation (19.5°C sleep station).',
-        targetDurationOrDose: '7.5h target sleep window',
+          'Stick to normal day/night cabin lighting and keep sleeping quarters cool (about 19.5°C).',
+        targetDurationOrDose: '7.5 hrs nightly sleep goal',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -495,13 +495,13 @@ function buildSystemCountermeasures(
     if (hr.status !== 'NOMINAL' || sbp.status !== 'NOMINAL' || dbp.status !== 'NOMINAL') {
       actions.push({
         id: 'cv-hydration-electrolyte',
-        title: 'Isotonic Fluid & Electrolyte Loading Protocol',
+        title: 'Drink Electrolyte Hydration Mix & Rest',
         priority: status === 'CRITICAL' ? 'IMMEDIATE' : 'ELEVATED',
         category: 'Hydration & Metabolic',
-        protocolCode: 'HRP-CV-07',
+        protocolCode: 'HEART-07',
         instruction:
-          'Administer 750 mL oral electrolyte solution (Na+ 110 mEq/L) over 45 minutes. Suspend high-intensity EVA exertion and repeat orthostatic cuff check after 30 minutes.',
-        targetDurationOrDose: '750 mL oral isotonic bolus',
+          'Slowly drink 750 mL of electrolyte water over 45 minutes. Pause heavy spacewalk work and re-check blood pressure after 30 minutes of rest.',
+        targetDurationOrDose: '750 mL electrolyte drink',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -511,16 +511,16 @@ function buildSystemCountermeasures(
         id: 'cv-glycemic-stabilization',
         title:
           glu.value < 74
-            ? 'Rapid Complex-Carbohydrate Glycemic Rescue'
-            : 'Low-Glycemic Nutrition & Metabolic Re-check',
+            ? 'Quick Sugar Boost for Low Blood Sugar'
+            : 'Balanced Meal & Light Exercise for High Sugar',
         priority: glu.status === 'CRITICAL' ? 'IMMEDIATE' : 'ELEVATED',
         category: 'Hydration & Metabolic',
-        protocolCode: 'HRP-MET-03',
+        protocolCode: 'SUGAR-03',
         instruction:
           glu.value < 74
-            ? 'Ingest 20 g fast-acting glucose gel followed by 15 g complex carbohydrate bar; re-test capillary glucose in 15 minutes.'
-            : 'Switch next two crew meals to low-glycemic index rations and complete 30 min aerobic cycle ergometer session (CEVIS) if cleared.',
-        targetDurationOrDose: glu.value < 74 ? '20 g glucose + 15m re-test' : '30 min moderate CEVIS',
+            ? 'Take 20 g of fast sugar gel plus a snack bar, then re-test blood sugar in 15 minutes.'
+            : 'Choose low-sugar meals for your next two rations and ride the exercise bike for 30 minutes if you feel well.',
+        targetDurationOrDose: glu.value < 74 ? '20 g sugar gel + 15m re-test' : '30 min exercise bike',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -528,13 +528,13 @@ function buildSystemCountermeasures(
     if (env.gravityG === 0 && status !== 'NOMINAL') {
       actions.push({
         id: 'cv-lbnp-conditioning',
-        title: 'Lower-Body Negative Pressure (LBNP) Orthostatic Conditioning',
+        title: 'Lower-Body Suction Suit (Fluid Balance)',
         priority: 'ELEVATED',
         category: 'Exercise & Loading',
-        protocolCode: 'HRP-CV-11',
+        protocolCode: 'HEART-11',
         instruction:
-          'Run Chibis / LBNP suit session at -25 mmHg to -40 mmHg while monitoring brachial BP and heart rate recovery.',
-        targetDurationOrDose: '20 min @ -30 mmHg',
+          'Use the Chibis leg suction suit for 20 minutes to gently pull blood back toward your legs while watching your heart rate and blood pressure.',
+        targetDurationOrDose: '20 min gentle leg suction',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -542,13 +542,13 @@ function buildSystemCountermeasures(
     if (actions.length === 0) {
       actions.push({
         id: 'cv-routine',
-        title: 'Daily Aerobic CEVIS / T2 Cardiovascular Conditioning',
+        title: 'Daily Cardio Bike or Treadmill Workout',
         priority: 'ROUTINE',
         category: 'Exercise & Loading',
-        protocolCode: 'HRP-CV-01',
+        protocolCode: 'HEART-01',
         instruction:
-          'Maintain 30–45 minutes of interval aerobic exercise at 65–75% max HR and target 2.5 L/day fluid intake.',
-        targetDurationOrDose: '35 min aerobic · 2.5 L H2O',
+          'Do 30–45 minutes of moderate cardio on the space station bike or treadmill and drink at least 2.5 L of water today.',
+        targetDurationOrDose: '35 min cardio · 2.5 L water',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -560,13 +560,13 @@ function buildSystemCountermeasures(
     if (bone.status !== 'NOMINAL' || env.gravityG < 0.2) {
       actions.push({
         id: 'ms-ared-protocol',
-        title: 'ARED High-Load Resistive Exercise Protocol',
+        title: 'Heavy Resistance Workout (ARED Weight Machine)',
         priority: bone.status === 'CRITICAL' ? 'IMMEDIATE' : bone.status === 'CAUTION' ? 'ELEVATED' : 'ROUTINE',
         category: 'Exercise & Loading',
-        protocolCode: 'HRP-MSK-09',
+        protocolCode: 'BONE-09',
         instruction:
-          'Execute Advanced Resistive Exercise Device (ARED) axial-loading cycle: squats, deadlifts, and heel raises at 75–85% 1-RM equivalent to stimulate osteoblast remodeling.',
-        targetDurationOrDose: '60 min ARED · 6 days/week',
+          'Use the onboard ARED resistance machine for squats, deadlifts, and heel raises to put healthy weight on your spine and leg bones.',
+        targetDurationOrDose: '60 min strength · 6 days/week',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -574,13 +574,13 @@ function buildSystemCountermeasures(
     if (bone.status !== 'NOMINAL') {
       actions.push({
         id: 'ms-calcium-vitd',
-        title: 'Vitamin D3, Calcium & Antiresorptive Bone Countermeasure',
+        title: 'Take Vitamin D3, Calcium & Extra Water',
         priority: bone.status === 'CRITICAL' ? 'IMMEDIATE' : 'ELEVATED',
         category: 'Hydration & Metabolic',
-        protocolCode: 'HRP-MSK-14',
+        protocolCode: 'BONE-14',
         instruction:
-          'Verify daily 1,000 IU Vitamin D3 + 1,200 mg Calcium intake. Monitor urine citrate and hydration to mitigate hypercalciuria renal stone risk during bone resorption.',
-        targetDurationOrDose: '1,000 IU Vit D3 + 2.8 L H2O/day',
+          'Take daily Vitamin D3 (1,000 IU) and Calcium (1,200 mg) supplements, and drink plenty of water to protect kidneys from calcium buildup.',
+        targetDurationOrDose: 'Vit D3 + Calcium + 2.8 L water',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -588,13 +588,13 @@ function buildSystemCountermeasures(
     if (bone.status === 'CRITICAL') {
       actions.push({
         id: 'ms-cmo-bone',
-        title: 'CMO Skeletal Fracture Risk & Bisphosphonate Review',
+        title: 'Avoid Heavy Lifting & Run Heel Bone Scan',
         priority: 'IMMEDIATE',
         category: 'Medical Officer Escalation',
-        protocolCode: 'CMO-MSK-02',
+        protocolCode: 'MED-BONE-02',
         instruction:
-          'Suspend high-impact EVA load transfers; perform quantitative ultrasound (QUS) calcaneal bone scan and transmit compressed scan packet to Flight Surgeon.',
-        targetDurationOrDose: 'Immediate QUS scan + CMO review',
+          'Pause heavy lifting during spacewalks. Run an ultrasound heel bone scan and send the result to the Crew Medical Officer and Earth doctors.',
+        targetDurationOrDose: 'Immediate heel scan + doctor review',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -607,13 +607,13 @@ function buildSystemCountermeasures(
     if (rad.status !== 'NOMINAL') {
       actions.push({
         id: 'ri-spe-shelter',
-        title: 'SPE Storm Shelter Retreat (Water-Wall / Polyethylene Core)',
+        title: 'Move to Radiation Storm Shelter Area',
         priority: rad.status === 'CRITICAL' ? 'IMMEDIATE' : 'ELEVATED',
         category: 'Radiation Shielding',
-        protocolCode: 'HRP-RAD-01',
+        protocolCode: 'RAD-01',
         instruction:
-          'Relocate entire crew into high-hydrogen shielded habitat core (>20 g/cm² water/polyethylene equivalent). Suspend all unshielded EVA or cupola operations until solar proton flux <10 pfu.',
-        targetDurationOrDose: 'Until SPE flux clears (~12–36h)',
+          'Move the crew into the water-lined storm shelter at the center of the ship. Cancel all outside spacewalks until solar storm levels drop.',
+        targetDurationOrDose: 'Stay sheltered ~12–36 hrs',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -621,13 +621,13 @@ function buildSystemCountermeasures(
     if (temp.status !== 'NOMINAL') {
       actions.push({
         id: 'ri-febrile-immune',
-        title: 'Thermal Regulation & Latent Viral Reactivation Assay',
+        title: 'Cool Down & Run Rapid Infection Swab',
         priority: temp.status === 'CRITICAL' ? 'IMMEDIATE' : 'ELEVATED',
         category: 'Medical Officer Escalation',
-        protocolCode: 'HRP-IMM-06',
+        protocolCode: 'IMMUNE-06',
         instruction:
-          'Collect salivary PCR swab & fingerstick CBC differential to screen for spaceflight immune dysregulation or bacterial infection. Administer antipyretic protocol if >38.0°C.',
-        targetDurationOrDose: '1x CBC + thermal trend q2h',
+          'Take a quick saliva swab and fingerstick blood check to look for infection or stress-triggered viruses. Take fever medicine if above 38.0°C.',
+        targetDurationOrDose: '1x blood check + temp every 2 hrs',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -635,13 +635,13 @@ function buildSystemCountermeasures(
     if (rad.status === 'CRITICAL') {
       actions.push({
         id: 'ri-cmo-hematology',
-        title: 'CMO Radiation Bio-Dosimetry & Lymphocyte Monitoring',
+        title: 'Track Radiation Badge & Blood Cell Counts',
         priority: 'IMMEDIATE',
         category: 'Medical Officer Escalation',
-        protocolCode: 'CMO-RAD-05',
+        protocolCode: 'MED-RAD-05',
         instruction:
-          'Verify personal active dosimeter (RAD/HERA) against cabin TEPC readings. Perform 12h serial blood counts and prepare colony-stimulating factor kit if acute dose exceeds career threshold.',
-        targetDurationOrDose: 'Serial 12h hematology check',
+          'Compare your personal radiation badge with the ship sensor. Check white blood cell counts every 12 hours and alert the Crew Medical Officer.',
+        targetDurationOrDose: '12-hour blood count checks',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -649,13 +649,13 @@ function buildSystemCountermeasures(
     if (actions.length === 0) {
       actions.push({
         id: 'ri-routine',
-        title: 'Continuous Dosimetry & Cabin Air Bio-Monitoring',
+        title: 'Wear Radiation Badge & Check Air Filters',
         priority: 'ROUTINE',
         category: 'Radiation Shielding',
-        protocolCode: 'HRP-RAD-00',
+        protocolCode: 'RAD-00',
         instruction:
-          'Maintain personal TLD/active dosimeter wear and verify HEPA/activated-carbon ECLSS trace contaminant scrubbing.',
-        targetDurationOrDose: 'Continuous passive + active log',
+          'Keep wearing your personal radiation badge and verify cabin HEPA air filters are running smoothly.',
+        targetDurationOrDose: 'Always on · daily check',
         autonomousExecutionNote: autonomousNote,
       });
     }
@@ -675,122 +675,122 @@ const SYSTEM_METADATA: Record<
   }
 > = {
   neuro_behavioral: {
-    displayName: 'Neuro / Behavioral',
-    anatomicalRegionLabel: 'Head & Cranial Region',
+    displayName: 'Brain, Sleep & Mood',
+    anatomicalRegionLabel: 'Head, Eyes & Focus',
     whyItMattersInSpace:
-      'Spaceflight-Associated Neuro-ocular Syndrome (SANS), circadian drift from 16 daily sunrises or deep-space darkness, and prolonged confinement directly degrade working memory, mood stability, and reaction time.',
-    selfExamProtocolName: 'Autonomous PVT-B & Cranial Neuro Self-Exam',
+      'Fluid shifting toward the head can press on the eyes and blur vision, while 16 sunrises a day and living in a small crew cabin hurt sleep, mood, and reaction time.',
+    selfExamProtocolName: '3-Step Focus, Vision & Sleep Check',
     selfExamSteps: [
       {
         stepNumber: 1,
-        title: 'Ambient Cabin & Pupil Baseline',
-        hardwareRequired: 'Cabin CO2 Sensor · Handheld Ophthalmoscope',
+        title: 'Check Cabin Air & Eyesight',
+        hardwareRequired: 'Air Monitor · Eye Grid Card',
         instruction:
-          'Verify cabin ppCO2 (< 3.0 mmHg) before testing. Check pupil symmetry and visual acuity on the onboard Amsler grid for SANS optic disc changes.',
+          'Make sure cabin CO2 is safe, then look at the eye grid card to check for blurry spots or wavy lines.',
       },
       {
         stepNumber: 2,
-        title: '3-Minute Psychomotor Vigilance Test (PVT-B)',
-        hardwareRequired: 'Astro FIT Tablet / Crew Workstation',
+        title: 'Take the 15-Second Focus Test',
+        hardwareRequired: 'Astro FIT Tablet',
         instruction:
-          'Complete 3 minutes of visual stimulus reaction taps in quiet quarters. Record reaction latency (>355 ms counts as an attention lapse).',
+          'Tap the screen as fast as you can when the blue box appears. Slower taps mean your brain is getting tired.',
       },
       {
         stepNumber: 3,
-        title: 'Sleep & Mood Self-Log',
-        hardwareRequired: 'Wrist Actigraph · Subjective Mood Scale',
+        title: 'Log Last Night’s Sleep & Mood',
+        hardwareRequired: 'Sleep Watch · Mood Rating',
         instruction:
-          'Sync wrist actigraphy sleep duration and enter honest 1–10 cognitive/mood score into the local Astro FIT offline buffer.',
+          'Record your hours slept from your wrist tracker and pick an honest 1–10 score for how sharp and rested you feel.',
       },
     ],
   },
   cardiovascular: {
-    displayName: 'Cardiovascular',
-    anatomicalRegionLabel: 'Thorax & Vascular System',
+    displayName: 'Heart & Blood Flow',
+    anatomicalRegionLabel: 'Chest & Circulation',
     whyItMattersInSpace:
-      'Without gravity pulling blood downward, ~2 liters of fluid shift into the chest and head. The heart remodels into a more spherical shape and plasma volume drops, creating severe fainting and arrhythmia risks during lunar/Martian gravity transitions.',
-    selfExamProtocolName: 'Self-Guided Brachial BP, ECG & Capillary Glucose Check',
+      'Without gravity pulling blood down to your legs, extra fluid moves into your chest and head. Blood volume drops, which can cause dizziness when landing on the Moon or Mars.',
+    selfExamProtocolName: '3-Step Heart, Blood Pressure & Sugar Check',
     selfExamSteps: [
       {
         stepNumber: 1,
-        title: 'Zero-G Stabilized Cuff Placement',
-        hardwareRequired: 'Wireless Oscillometric Cuff · Restraint Strap',
+        title: 'Measure Blood Pressure',
+        hardwareRequired: 'Wireless Arm Cuff · Foot Strap',
         instruction:
-          'Anchor torso using foot restraints. Place cuff 2 cm above the antecubital fossa at heart level; remain still for 60 seconds prior to inflation.',
+          'Hook your feet into a floor strap so you stay still, wrap the cuff snugly around your upper arm at heart level, and relax for 60 seconds.',
       },
       {
         stepNumber: 2,
-        title: 'Single-Lead Rhythm & Vascular Ultrasound',
-        hardwareRequired: 'Handheld Butterfly/Echo Ultrasound · Gel',
+        title: 'Quick Heart Ultrasound',
+        hardwareRequired: 'Handheld Ultrasound Probe · Gel',
         instruction:
-          'Apply acoustic gel at the left parasternal 4th intercostal space (long-axis view) to verify ventricular filling and rule out venous stasis.',
+          'Put warm gel on the probe and hold it against the left side of your chest to see your heart pumping cleanly.',
       },
       {
         stepNumber: 3,
-        title: 'Capillary Glucose Calibration',
-        hardwareRequired: 'Space-Certified Glucometer · Wipe',
+        title: 'Check Blood Sugar',
+        hardwareRequired: 'Fingerstick Meter · Alcohol Wipe',
         instruction:
-          'Cleanse lateral fingertip, deploy lancet with surface-tension containment cap so blood droplet stays adhered, and touch test strip edge.',
+          'Wipe your fingertip, prick lightly, and touch the test strip to the blood drop to log your energy sugar level.',
       },
     ],
   },
   musculoskeletal: {
-    displayName: 'Musculoskeletal',
-    anatomicalRegionLabel: 'Axial & Appendicular Skeleton',
+    displayName: 'Bones & Muscles',
+    anatomicalRegionLabel: 'Spine, Hips & Legs',
     whyItMattersInSpace:
-      'Astronauts lose 1% to 1.5% of trabecular bone mineral density per month in microgravity—especially in the lumbar spine, femoral neck, and pelvis—while spinal discs swell and postural muscles atrophy rapidly.',
-    selfExamProtocolName: 'ARED Load Verification & Quantitative Bone Ultrasound',
+      'Floating all day means your leg and back bones do not carry weight. Astronauts lose 1%–1.5% of bone strength every month unless they lift weights daily.',
+    selfExamProtocolName: '3-Step Bone Strength & Workout Check',
     selfExamSteps: [
       {
         stepNumber: 1,
-        title: 'Calcaneal Quantitative Ultrasound (QUS)',
-        hardwareRequired: 'Portable Bone Sonometry Cradle',
+        title: 'Run Heel Ultrasound Bone Scan',
+        hardwareRequired: 'Portable Heel Bone Scanner',
         instruction:
-          'Insert right heel into acoustic coupling pads; run 45-second broadband ultrasound attenuation scan to update Bone Density T-score proxy.',
+          'Place your right heel into the padded ultrasound cup for 45 seconds to measure current bone strength.',
       },
       {
         stepNumber: 2,
-        title: 'Lumbar & Hip Mobility Screen',
-        hardwareRequired: 'Crew Restraint Frame',
+        title: 'Check Back & Hip Flexibility',
+        hardwareRequired: 'Wall Handhold',
         instruction:
-          'Perform controlled axial extension and single-leg isometric squat check; note any sharp radicular pain or joint crepitus.',
+          'Hold a wall bar and gently stretch your lower back and bend each knee, noting any stiffness or sharp soreness.',
       },
       {
         stepNumber: 3,
-        title: 'ARED Load Calibration Audit',
-        hardwareRequired: 'ARED Cylinder Pressure Telemetry',
+        title: 'Check ARED Workout Weights',
+        hardwareRequired: 'ARED Weight Machine',
         instruction:
-          'Verify vacuum cylinder resistance calibration matches prescribed resistive workout log prior to next scheduled load session.',
+          'Make sure the resistance machine resistance setting matches your daily strength workout target.',
       },
     ],
   },
   radiation_immune: {
-    displayName: 'Radiation / Immune',
-    anatomicalRegionLabel: 'Full-Body Hematopoietic & Immune Shield',
+    displayName: 'Radiation & Immune Shield',
+    anatomicalRegionLabel: 'Full-Body Protection & Fever',
     whyItMattersInSpace:
-      'High-energy Galactic Cosmic Rays and Solar Particle Events penetrate spacecraft hulls, damaging bone marrow stem cells and triggering latent viral reactivation alongside closed-cabin microbial exposure.',
-    selfExamProtocolName: 'Active Dosimetry Cross-Check & Thermal/Immune Assay',
+      'Outside Earth’s atmosphere, cosmic rays and solar storms pass through spacecraft walls. Over time this weakens immune defenses and raises cancer risk.',
+    selfExamProtocolName: '3-Step Radiation Badge & Fever Check',
     selfExamSteps: [
       {
         stepNumber: 1,
-        title: 'Personal Dosimeter & TEPC Sync',
-        hardwareRequired: 'Crew Active Dosimeter (HERA / RAD)',
+        title: 'Check Personal Radiation Badge',
+        hardwareRequired: 'Chest Radiation Badge · Ship Sensor',
         instruction:
-          'Read cumulative mSv badge on chest harness and cross-verify against habitat Tissue-Equivalent Proportional Counter (TEPC) flux.',
+          'Read your cumulative mSv badge number and confirm it matches the ship’s wall radiation monitor.',
       },
       {
         stepNumber: 2,
-        title: 'Tympanic / Temporal Core Temperature',
-        hardwareRequired: 'Infrared Temporal Scanner',
+        title: 'Take Forehead Temperature',
+        hardwareRequired: 'Digital Forehead Thermometer',
         instruction:
-          'Measure temporal artery temperature twice (30s apart) away from cabin ventilation ducts to avoid convective cooling skew.',
+          'Scan your forehead twice (30 seconds apart) away from air vents to make sure you do not have a fever.',
       },
       {
         stepNumber: 3,
-        title: 'Lymph Node & Dermal Screening',
-        hardwareRequired: 'Crew Mirror · High-CRI Inspection Light',
+        title: 'Check Neck & Skin',
+        hardwareRequired: 'Cabin Mirror · Flashlight',
         instruction:
-          'Palpate cervical and axillary lymph nodes for tenderness and inspect skin for radiation erythema or persistent closed-cabin dermatitis.',
+          'Check your neck for swollen glands and inspect your skin for rashes or irritation from recycled cabin air.',
       },
     ],
   },
@@ -824,35 +824,35 @@ export interface DailyRoutineTask {
 export const DAILY_ROUTINE_TASKS: DailyRoutineTask[] = [
   {
     id: 'routine-cv-check',
-    title: 'Morning Cardiovascular & BP Check',
+    title: 'Morning Heart & Blood Pressure Check',
     targetSystem: 'cardiovascular',
     durationLabel: '10 min',
     readinessPoints: 6,
-    description: 'Zero-G cuff calibration, resting HR check, and 500 mL electrolyte pre-load.',
+    description: 'Check resting pulse and blood pressure, plus drink 500 mL of hydration mix.',
   },
   {
     id: 'routine-ared-workout',
-    title: '2-Hour ARED Resistance Workout',
+    title: '2-Hour Strength & Cardio Workout',
     targetSystem: 'musculoskeletal',
     durationLabel: '120 min',
     readinessPoints: 8,
-    description: 'Axial resistive squats, deadlifts, and T2 treadmill loading to counter bone resorption.',
+    description: 'Do squats, deadlifts, and treadmill running to keep bones and muscles strong.',
   },
   {
     id: 'routine-rad-sync',
-    title: 'Radiation Dosimeter Sync',
+    title: 'Daily Radiation Badge Check',
     targetSystem: 'radiation_immune',
     durationLabel: '5 min',
     readinessPoints: 5,
-    description: 'Cross-check personal HERA/RAD badge with cabin TEPC and inspect storm shelter readiness.',
+    description: 'Compare your wearable badge against cabin sensors and check storm shelter readiness.',
   },
   {
     id: 'routine-circadian-mood',
-    title: 'Evening Circadian & Mood Log',
+    title: 'Evening Sleep & Mood Check-In',
     targetSystem: 'neuro_behavioral',
     durationLabel: '15 min',
     readinessPoints: 6,
-    description: 'Dim quarters <10 lux, verify ppCO2, and log PVT-B cognitive & sleep alignment.',
+    description: 'Dim cabin lights before sleep, check air quality, and log your mood & focus.',
   },
 ];
 
@@ -975,15 +975,15 @@ export function evaluateMissionTelemetry(
     const abnormalList = sysBiomarkers.filter((b) => b.status !== 'NOMINAL');
     let clinicalFindingSummary =
       abnormalList.length === 0
-        ? `All ${meta.displayName.toLowerCase()} telemetry parameters are within calibrated ${environment.shortName} operational baselines.`
-        : `${abnormalList.map((b) => `${b.label} (${b.value.toFixed(b.precision)} ${b.unit} · ${b.status})`).join('; ')} deviating from ${environment.shortName} baseline.`;
+        ? `All ${meta.displayName.toLowerCase()} readings are within safe ${environment.shortName} limits.`
+        : `${abnormalList.map((b) => `${b.label} (${b.value.toFixed(b.precision)} ${b.unit} · ${b.status})`).join('; ')} outside the safe ${environment.shortName} range.`;
 
     if (scanFinding && scanFinding.targetSystem === sysId) {
       clinicalFindingSummary = `${scanFinding.scanLabel}: ${scanFinding.summary} ${clinicalFindingSummary}`;
     }
 
     if (resolvedViaCountermeasure) {
-      clinicalFindingSummary = `CAUTION mitigated via completed NASA HRP countermeasure/routine protocol. ${clinicalFindingSummary}`;
+      clinicalFindingSummary = `Warning cleared after completing daily health or recovery step. ${clinicalFindingSummary}`;
     }
 
     countermeasures.forEach((cm) => allCountermeasures.push(cm));
@@ -1016,8 +1016,8 @@ export function evaluateMissionTelemetry(
   );
 
   const earthCommsStatusLabel = environment.autonomousModeRequired
-    ? `${environment.earthDelayLabel} — Autonomous Mode Active`
-    : `${environment.earthDelayLabel} — Real-Time Flight Surgeon Link`;
+    ? `${environment.earthDelayLabel} — Onboard Self-Care Active`
+    : `${environment.earthDelayLabel} — Live Earth Doctor Link`;
 
   return {
     environment,
@@ -1056,12 +1056,12 @@ export const MISSION_SCENARIOS: Record<ScenarioId, MissionScenarioPreset> = {
   nominal_iss: {
     id: 'nominal_iss',
     code: 'SCN-A',
-    name: 'Scenario A: Nominal ISS Orbit',
-    subtitle: 'Steady LEO operations · All systems within HRP baseline',
+    name: 'Scenario A: Healthy ISS Orbit',
+    subtitle: 'Normal day in orbit · All body systems healthy',
     recommendedEnvironment: 'iss_orbit',
-    missionElapsedTimeStart: 'T+ 042d 14:22:09',
+    missionElapsedTimeStart: 'DAY 042 · 14:22:09',
     description:
-      'Crew member operating on standard 16-orbit circadian schedule aboard ISS with ARED resistive training and nominal TDRS telemetry link.',
+      'Normal day aboard the International Space Station with regular workouts, steady sleep, and live Earth communication.',
     triggerReading: {
       heartRate: 68,
       systolicBP: 118,
@@ -1085,19 +1085,19 @@ export const MISSION_SCENARIOS: Record<ScenarioId, MissionScenarioPreset> = {
         boneDensityIndex: Number((-0.2 - i * 0.001).toFixed(2)),
         moodCognitiveScore: Number((8.5 + Math.sin(i * 0.5) * 0.3).toFixed(1)),
       },
-      eventNote: i === 6 ? 'Weekly ARED & CEVIS assessment' : i === 13 ? 'Nominal baseline confirmed' : undefined,
+      eventNote: i === 6 ? 'Weekly exercise fitness check' : i === 13 ? 'All readings healthy' : undefined,
     })),
   },
 
   mars_spe: {
     id: 'mars_spe',
     code: 'SCN-B',
-    name: 'Scenario B: Mars Transit — Solar Particle Event',
-    subtitle: 'Acute radiation spike, sleep disruption & tachycardia under 18m 42s comms delay',
+    name: 'Scenario B: Mars Trip — Solar Storm',
+    subtitle: 'High radiation spike, poor sleep & fast heart rate with 18m 42s Earth delay',
     recommendedEnvironment: 'mars_transit',
-    missionElapsedTimeStart: 'T+ 118d 07:45:18',
+    missionElapsedTimeStart: 'DAY 118 · 07:45:18',
     description:
-      'X-class solar flare triggers an acute Solar Particle Event during heliocentric cruise. Autonomous onboard countermeasures must engage immediately due to Earth light-lag.',
+      'A strong solar flare sends a wave of radiation toward the Mars ship. Because messages to Earth take 18+ minutes, the crew must take shelter right away.',
     triggerReading: {
       heartRate: 109,
       systolicBP: 146,
@@ -1126,9 +1126,9 @@ export const MISSION_SCENARIOS: Record<ScenarioId, MissionScenarioPreset> = {
         },
         eventNote:
           i === 10
-            ? 'NOAA/SEP Alert: X2.4 flare detected'
+            ? 'Solar Flare Alert detected'
             : i === 13
-            ? 'Peak SPE flux · Shelter protocol active'
+            ? 'Peak solar storm · Crew in shelter'
             : undefined,
       };
     }),
@@ -1137,12 +1137,12 @@ export const MISSION_SCENARIOS: Record<ScenarioId, MissionScenarioPreset> = {
   lunar_eva_strain: {
     id: 'lunar_eva_strain',
     code: 'SCN-C',
-    name: 'Scenario C: Lunar EVA — Cardiovascular Strain & Mild Dehydration',
-    subtitle: 'South-pole surface traverse metabolic & fluid-balance alert',
+    name: 'Scenario C: Moon Walk — Heat & Dehydration',
+    subtitle: 'High pulse, low blood sugar & mild fever after long Moonwalk',
     recommendedEnvironment: 'lunar_base',
-    missionElapsedTimeStart: 'T+ 019d 19:08:52',
+    missionElapsedTimeStart: 'DAY 019 · 19:08:52',
     description:
-      'Extended 6.5-hour Shackleton crater geological EVA elevates core temperature and heart rate while depleting plasma hydration and blood glucose reserves.',
+      'After a tiring 6.5-hour Moonwalk at the South Pole crater, body temperature and heart rate rise while fluids and blood sugar run low.',
     triggerReading: {
       heartRate: 116,
       systolicBP: 145,
@@ -1171,9 +1171,9 @@ export const MISSION_SCENARIOS: Record<ScenarioId, MissionScenarioPreset> = {
         },
         eventNote:
           i === 11
-            ? 'Lunar South Pole EVA-04 initiated'
+            ? 'Long Moonwalk started'
             : i === 13
-            ? 'Post-EVA tachycardia & mild hypoglycemia'
+            ? 'Fast pulse & low sugar after walk'
             : undefined,
       };
     }),
@@ -1182,12 +1182,12 @@ export const MISSION_SCENARIOS: Record<ScenarioId, MissionScenarioPreset> = {
   day_180_confinement: {
     id: 'day_180_confinement',
     code: 'SCN-D',
-    name: 'Scenario D: Day 180 Confinement — Behavioral Fatigue & Bone Density Dip',
-    subtitle: 'Long-duration deep-space isolation & skeletal unloading degradation',
+    name: 'Scenario D: Day 180 — Isolation & Bone Loss',
+    subtitle: '6 months in deep space · Fatigue, poor sleep & weaker bones',
     recommendedEnvironment: 'mars_transit',
-    missionElapsedTimeStart: 'T+ 180d 03:11:44',
+    missionElapsedTimeStart: 'DAY 180 · 03:11:44',
     description:
-      'Six months into deep-space transit, cumulative Earth-out-of-view isolation, chronic sleep fragmentation, and microgravity unloading trigger behavioral fatigue and bone mineral loss.',
+      'Six months into deep space, being far from Earth with broken sleep and zero gravity leads to stress, low mood, and steady bone loss.',
     triggerReading: {
       heartRate: 84,
       systolicBP: 129,
@@ -1213,9 +1213,9 @@ export const MISSION_SCENARIOS: Record<ScenarioId, MissionScenarioPreset> = {
       },
       eventNote:
         i === 7
-          ? 'Earth-out-of-view psychological milestone'
+          ? 'Earth no longer visible as a disc'
           : i === 13
-          ? 'QUS Bone T-score & PVT-B alert'
+          ? 'Bone strength & focus warning'
           : undefined,
     })),
   },
@@ -1237,7 +1237,7 @@ export function generateLiveMicroVariation(base: BiomarkerReading): BiomarkerRea
 
 export interface MissionReadinessSummary {
   score: number; // 0-100
-  tierLabel: 'EVA Cleared' | 'Flight Ready' | 'Monitor Closely' | 'Restricted Ops';
+  tierLabel: 'Spacewalk Ready' | 'Mission Ready' | 'Watch Closely' | 'Rest Needed';
   routineCompletionRatio: string;
   allRoutineDone: boolean;
 }
@@ -1262,13 +1262,13 @@ export function computeMissionReadiness(
   const countermeasureBonus = Math.min(10, completedCountermeasures.length * 3);
   const rawScore = Math.max(12, Math.min(100, physScore + routinePoints + countermeasureBonus));
 
-  let tierLabel: MissionReadinessSummary['tierLabel'] = 'Monitor Closely';
+  let tierLabel: MissionReadinessSummary['tierLabel'] = 'Watch Closely';
   if (rawScore >= 90 && report.overallStatus === 'NOMINAL') {
-    tierLabel = 'EVA Cleared';
+    tierLabel = 'Spacewalk Ready';
   } else if (rawScore >= 75 && report.overallStatus !== 'CRITICAL') {
-    tierLabel = 'Flight Ready';
+    tierLabel = 'Mission Ready';
   } else if (rawScore < 55 || report.overallStatus === 'CRITICAL') {
-    tierLabel = 'Restricted Ops';
+    tierLabel = 'Rest Needed';
   }
 
   return {
@@ -1288,83 +1288,84 @@ export function generateLocalFlightSurgeonReply(
   const r = report.reading;
   const env = report.environment;
   const sys = report.systemEvaluations;
+  const showStatus = (s: ClinicalStatus) => (s === 'NOMINAL' ? 'NORMAL' : s);
 
   if (q.includes('heart rate') || q.includes('tachycardia') || q.includes('bp') || q.includes('blood pressure')) {
     return [
-      `Onboard Telemetry Assessment (${env.shortName}): Your current heart rate is ${r.heartRate} bpm and blood pressure is ${r.systolicBP}/${r.diastolicBP} mmHg (Cardiovascular status: ${sys.cardiovascular.status}).`,
+      `Heart & Blood Pressure Check (${env.shortName}): Your heart rate is ${r.heartRate} bpm and blood pressure is ${r.systolicBP}/${r.diastolicBP} mmHg (Status: ${showStatus(sys.cardiovascular.status)}).`,
       '',
-      'Why This Occurs in Spaceflight:',
-      '• Cephalad fluid shift in microgravity/partial gravity reduces circulating plasma volume by 10–15% and alters baroreceptor vagal tone.',
-      '• Combined with EVA thermal exertion or mild dehydration, resting and exertional heart rate rises to maintain cardiac output.',
+      'Why This Happens in Space:',
+      '• Without gravity pulling blood down, fluids shift toward your head and blood volume drops 10–15%.',
+      '• Heavy spacewalks or mild dehydration make your heart beat faster to keep blood moving.',
       '',
-      'Immediate Autonomous Actions:',
-      '• Ingest 750 mL isotonic oral electrolyte solution over 45 minutes.',
-      '• Anchor in foot restraints and repeat brachial cuff BP after 30 minutes of rest.',
-      '• Escalate to Crew Medical Officer (CMO) if resting HR stays >110 bpm or dizziness occurs.',
+      'What To Do Right Now:',
+      '• Drink 750 mL of electrolyte water slowly over 45 minutes.',
+      '• Hook your feet in floor straps, rest 30 minutes, and re-check your blood pressure.',
+      '• Tell the Crew Medical Officer if your resting heart rate stays above 110 bpm or you feel dizzy.',
     ].join('\n');
   }
 
   if (q.includes('ultrasound') || q.includes('echo') || q.includes('cardiac')) {
     return [
-      `Self-Guided Cardiac & Vascular Ultrasound Protocol (${env.shortName}):`,
-      `Current vitals context: HR ${r.heartRate} bpm · BP ${r.systolicBP}/${r.diastolicBP} mmHg · Readiness ${readinessScore}%.`,
+      `Simple Heart Ultrasound Guide (${env.shortName}):`,
+      `Current readings: Heart Rate ${r.heartRate} bpm · Blood Pressure ${r.systolicBP}/${r.diastolicBP} mmHg · Health Score ${readinessScore}%.`,
       '',
-      'Step-by-Step Procedure:',
-      '1. Anchor torso with crew foot loops so probe pressure does not push you away from the chest wall.',
-      '2. Apply warm acoustic gel to the phased-array probe; place at the left parasternal 4th intercostal space (indicator toward right shoulder) for a Parasternal Long-Axis view.',
-      '3. Capture a 5-second cine loop of left ventricular filling and aortic outflow.',
-      '4. Slide probe subxiphoid to image the Inferior Vena Cava (IVC) collapsibility index (<50% collapse confirms adequate hydration).',
-      '5. Save scan in the Multi-Modal Self-Check modal for onboard diagnostic evaluation.',
+      'Step-by-Step Guide:',
+      '1. Lock your feet in floor straps so pushing the probe does not float you backward.',
+      '2. Put warm gel on the handheld probe and place it on the left side of your chest.',
+      '3. Record a 5-second video clip showing your heart chambers pumping.',
+      '4. Slide the probe just below your ribs to check hydration in the main vein.',
+      '5. Save the scan inside "Checkup & Log → Body Scan Check" for onboard review.',
     ].join('\n');
   }
 
   if (q.includes('radiation') || q.includes('spe') || q.includes('msv') || q.includes('shelter')) {
     return [
-      `Radiation & Immune Assessment (${env.shortName} · ${env.earthDelayLabel}):`,
-      `Your cumulative dose is ${r.cumulativeRadiation.toFixed(1)} mSv (Baseline nominal limit: ${env.baselines.cumulativeRadiation.nominalMax} mSv · Status: ${sys.radiation_immune.status}). Core temp is ${r.bodyTemp.toFixed(1)}°C.`,
+      `Radiation & Immune Check (${env.shortName} · ${env.earthDelayLabel}):`,
+      `Your total radiation dose is ${r.cumulativeRadiation.toFixed(1)} mSv (Safe limit: ${env.baselines.cumulativeRadiation.nominalMax} mSv · Status: ${showStatus(sys.radiation_immune.status)}). Body temp is ${r.bodyTemp.toFixed(1)}°C.`,
       '',
-      'Prescribed NASA HRP Countermeasures:',
-      '• Retreat immediately to the water-wall / polyethylene storm shelter core (>20 g/cm² shielding equivalent) until solar proton flux drops below 10 pfu.',
-      '• Cross-verify your personal HERA/RAD dosimeter against the cabin TEPC monitor.',
-      '• Maintain 2.5+ L hydration and monitor 12-hour serial lymphocyte / CBC trends if dose enters CRITICAL territory.',
+      'Safety Steps:',
+      '• Move inside the water-lined storm shelter in the middle of the ship until solar storm radiation drops.',
+      '• Compare your wearable badge reading against the ship’s wall radiation sensor.',
+      '• Drink 2.5+ L of water daily and watch for fever or changes in white blood cell counts.',
     ].join('\n');
   }
 
   if (q.includes('sans') || q.includes('optic') || q.includes('eye') || q.includes('sleep') || q.includes('mood') || q.includes('fatigue')) {
     return [
-      `Neuro-Behavioral & SANS Assessment (${env.shortName}):`,
-      `Daily sleep is ${r.sleepHours.toFixed(1)} hrs and Mood/Cognitive score is ${r.moodCognitiveScore.toFixed(1)}/10 (Status: ${sys.neuro_behavioral.status}).`,
+      `Brain, Sleep & Vision Check (${env.shortName}):`,
+      `Sleep is ${r.sleepHours.toFixed(1)} hrs and Mood & Focus score is ${r.moodCognitiveScore.toFixed(1)}/10 (Status: ${showStatus(sys.neuro_behavioral.status)}).`,
       '',
-      'Guidance & Self-Exam:',
-      '• Perform an Optic Nerve Sheath Diameter (ONSD) ocular ultrasound (>5.5 mm suggests cephalad fluid shift / SANS risk) and check the Amsler grid for visual distortion.',
-      '• Run 45 minutes of 480 nm blue-enriched light at wake cycle and verify cabin ppCO2 < 2.5 mmHg.',
-      '• Complete the 15-second PVT-B reflex test inside the Log Vitals modal to quantify reaction lapses.',
+      'Easy Self-Check Steps:',
+      '• Look at the eye grid card and run an eye ultrasound if your vision feels blurry.',
+      '• Sit in bright blue-enriched morning light for 45 minutes and make sure cabin CO2 is low.',
+      '• Take the 15-second Focus Test inside "Checkup & Log" to see how fast you are reacting.',
     ].join('\n');
   }
 
   if (q.includes('bone') || q.includes('ared') || q.includes('muscle') || q.includes('skeletal')) {
     return [
-      `Musculoskeletal & Bone Integrity Brief (${env.shortName}):`,
-      `Current Bone Density Index is ${r.boneDensityIndex.toFixed(2)} T-score (Status: ${sys.musculoskeletal.status}).`,
+      `Bones & Muscles Check (${env.shortName}):`,
+      `Current Bone Strength Score is ${r.boneDensityIndex.toFixed(2)} T-score (Status: ${showStatus(sys.musculoskeletal.status)}).`,
       '',
-      'Autonomous Countermeasures:',
-      '• Complete your 2-hour ARED high-load axial resistive workout (squats, deadlifts, heel raises at 75–85% 1-RM equivalent).',
-      '• Maintain 1,000 IU Vitamin D3 + 1,200 mg Calcium and 2.8 L/day hydration to prevent hypercalciuria renal stones.',
-      '• Log a Calcaneal QUS scan in the Self-Check modal to track weekly bone mineral trends.',
+      'Daily Recovery Steps:',
+      '• Complete your 2-hour strength workout on the ARED weight machine (squats, deadlifts, heel raises).',
+      '• Take daily Vitamin D3 (1,000 IU) and Calcium (1,200 mg) with 2.8 L of water.',
+      '• Log a Heel Bone Scan in "Checkup & Log" to track weekly bone strength.',
     ].join('\n');
   }
 
   return [
-    `Astro FIT Onboard Clinical Summary (${env.name} · ${env.earthDelayLabel}):`,
-    `• Overall Posture: ${report.overallStatus} | Mission Readiness: ${readinessScore}%`,
-    `• Cardiovascular: HR ${r.heartRate} bpm · BP ${r.systolicBP}/${r.diastolicBP} mmHg (${sys.cardiovascular.status})`,
-    `• Radiation / Immune: ${r.cumulativeRadiation.toFixed(1)} mSv · ${r.bodyTemp.toFixed(1)}°C (${sys.radiation_immune.status})`,
-    `• Neuro / Behavioral: ${r.sleepHours.toFixed(1)}h sleep · ${r.moodCognitiveScore.toFixed(1)}/10 cog (${sys.neuro_behavioral.status})`,
-    `• Musculoskeletal: ${r.boneDensityIndex.toFixed(2)} T-score (${sys.musculoskeletal.status})`,
+    `Astro FIT Health Summary (${env.name} · ${env.earthDelayLabel}):`,
+    `• Overall Health: ${showStatus(report.overallStatus)} | Health Score: ${readinessScore}%`,
+    `• Heart & Blood: ${r.heartRate} bpm · ${r.systolicBP}/${r.diastolicBP} mmHg (${showStatus(sys.cardiovascular.status)})`,
+    `• Radiation & Immune: ${r.cumulativeRadiation.toFixed(1)} mSv · ${r.bodyTemp.toFixed(1)}°C (${showStatus(sys.radiation_immune.status)})`,
+    `• Brain, Sleep & Mood: ${r.sleepHours.toFixed(1)}h sleep · ${r.moodCognitiveScore.toFixed(1)}/10 focus (${showStatus(sys.neuro_behavioral.status)})`,
+    `• Bones & Muscles: ${r.boneDensityIndex.toFixed(2)} T-score (${showStatus(sys.musculoskeletal.status)})`,
     '',
     report.prioritizedCountermeasures[0]
-      ? `Top Priority Action: [${report.prioritizedCountermeasures[0].priority}] ${report.prioritizedCountermeasures[0].title} — ${report.prioritizedCountermeasures[0].instruction}`
-      : 'All physiological systems are operating within nominal NASA HRP tolerances.',
+      ? `Top Action Right Now: ${report.prioritizedCountermeasures[0].title} — ${report.prioritizedCountermeasures[0].instruction}`
+      : 'All body systems look healthy right now.',
   ].join('\n');
 }
 
@@ -1528,13 +1529,13 @@ export function computePredictiveTrajectoryAlerts(
 
       const headline =
         breachDayOffset === 0
-          ? `${range.label} ${severity === 'CRITICAL' ? 'limit breached' : 'above nominal'} (${slopeText})`
-          : `${range.label} projected to breach ${thresholdValue.toFixed(range.precision)} ${range.unit} in ~${breachDayOffset}d`;
+          ? `${range.label} ${severity === 'CRITICAL' ? 'past safe limit' : 'above normal range'} (${slopeText})`
+          : `${range.label} could cross ${thresholdValue.toFixed(range.precision)} ${range.unit} in ~${breachDayOffset}d`;
 
       const detail =
         breachDayOffset === 0
-          ? `Current ${currentValue.toFixed(range.precision)} ${range.unit} · +5d trajectory reaches ${endForecast.toFixed(range.precision)} ${range.unit}`
-          : `Trajectory (${slopeText}) reaches ${endForecast.toFixed(range.precision)} ${range.unit} by D+${horizonDays} vs. ${severity.toLowerCase()} limit ${thresholdValue.toFixed(range.precision)} ${range.unit}.`;
+          ? `Now ${currentValue.toFixed(range.precision)} ${range.unit} · 5-day trend reaches ${endForecast.toFixed(range.precision)} ${range.unit}`
+          : `At ${slopeText}, it could reach ${endForecast.toFixed(range.precision)} ${range.unit} in ${horizonDays} days (limit: ${thresholdValue.toFixed(range.precision)} ${range.unit}).`;
 
       alerts.push({
         metricKey: key,

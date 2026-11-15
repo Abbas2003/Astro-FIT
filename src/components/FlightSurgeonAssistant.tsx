@@ -33,10 +33,10 @@ interface FlightSurgeonAssistantProps {
 }
 
 const QUICK_PROMPTS = [
-  'Why is my resting heart rate elevated in microgravity?',
-  'Guide me through a cardiac ultrasound',
-  "What countermeasures do I need for today's radiation spike?",
-  'How do I check for SANS optic nerve swelling?',
+  'Why is my heart rate high in space?',
+  'How do I do a quick heart ultrasound check?',
+  "What should I do for today's radiation spike?",
+  'How do I check my eyes and focus in microgravity?',
 ];
 
 export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
@@ -54,8 +54,8 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
       id: 'welcome-msg',
       role: 'assistant',
       content:
-        'Flight Surgeon Clinical Decision Support online. Live dashboard vitals, NASA HRP 5 Hazards baselines, and onboard self-exam protocols are synchronized. Select a query or enter a clinical prompt.',
-      sourceLabel: 'FLIGHT SURGEON CONSOLE',
+        'Flight Surgeon Assistant is ready. It checks your live vitals, NASA space health guidelines, and step-by-step self-checks. Pick a common question below or ask your own.',
+      sourceLabel: 'FLIGHT SURGEON ASSISTANT',
     },
   ]);
   const [input, setInput] = useState('');
@@ -95,7 +95,7 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
             id: `asst-${Date.now()}`,
             role: 'assistant',
             content: localReply,
-            sourceLabel: 'LOCAL ONBOARD HRP KNOWLEDGE BASE (OFFLINE)',
+            sourceLabel: 'ONBOARD HEALTH GUIDE (OFFLINE)',
           },
         ]);
         return;
@@ -147,7 +147,7 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
               id: `asst-${Date.now()}`,
               role: 'assistant',
               content: data.reply!,
-              sourceLabel: 'FLIGHT SURGEON AI // TELEMETRY LINKED',
+              sourceLabel: 'FLIGHT SURGEON AI // LIVE VITALS',
             },
           ]);
           return;
@@ -165,7 +165,7 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
           id: `asst-${Date.now()}`,
           role: 'assistant',
           content: fallbackReply,
-          sourceLabel: 'LOCAL ONBOARD HRP KNOWLEDGE BASE',
+          sourceLabel: 'ONBOARD HEALTH GUIDE (OFFLINE)',
         },
       ]);
     } catch {
@@ -180,7 +180,7 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
           id: `asst-${Date.now()}`,
           role: 'assistant',
           content: fallbackReply,
-          sourceLabel: 'LOCAL ONBOARD HRP KNOWLEDGE BASE',
+          sourceLabel: 'ONBOARD HEALTH GUIDE (OFFLINE)',
         },
       ]);
     } finally {
@@ -206,11 +206,11 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
             <div className="flex items-center gap-2">
               <Bot className="h-4 w-4 text-[#2B7FFF] shrink-0" aria-hidden="true" />
               <h2 id="flight-surgeon-title" className="text-sm font-semibold text-white truncate">
-                Autonomous Flight Surgeon Co-Pilot
+                Flight Surgeon Assistant
               </h2>
             </div>
             <p className="mt-1 font-mono-tabular text-[11px] text-[#8E96AA] break-words">
-              {report.environment.shortName} · HR {report.reading.heartRate} bpm · {report.reading.cumulativeRadiation.toFixed(1)} mSv · READINESS {readiness.score}%
+              {report.environment.shortName} · HR {report.reading.heartRate} bpm · {report.reading.cumulativeRadiation.toFixed(1)} mSv · HEALTH {readiness.score}%
             </p>
           </div>
           <button
@@ -227,7 +227,7 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
         <div className="border-b border-[#232734] bg-[#0D0F15] px-4 py-2.5 sm:px-5 sm:py-3 max-h-36 overflow-y-auto sm:max-h-none">
           <div className="mb-2 flex items-center gap-1.5 flight-micro-label">
             <Terminal className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
-            <span>Quick Clinical Queries</span>
+            <span>Common Questions</span>
           </div>
           <div className="flex flex-wrap gap-1.5">
             {QUICK_PROMPTS.map((qp) => (
@@ -286,7 +286,7 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
           {isSending && (
             <div className="flex items-center gap-2 text-xs text-[#2B7FFF] font-mono-tabular">
               <Bot className="h-4 w-4" aria-hidden="true" />
-              <span>PROCESSING LIVE TELEMETRY &amp; HRP PROTOCOLS...</span>
+              <span>CHECKING YOUR VITALS &amp; HEALTH GUIDE...</span>
             </div>
           )}
           <div ref={bottomRef} />
@@ -305,7 +305,7 @@ export const FlightSurgeonAssistant: React.FC<FlightSurgeonAssistantProps> = ({
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Enter clinical query..."
+              placeholder="Ask a health question..."
               aria-label="Ask Flight Surgeon Assistant"
               className="flex-1 min-w-0 rounded-[4px] border border-[#232734] bg-[#090A0F] px-3 py-2 text-xs text-white placeholder:text-[#8E96AA]/60 focus:border-[#2B7FFF] focus:outline-none"
             />

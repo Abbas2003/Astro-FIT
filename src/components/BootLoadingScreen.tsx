@@ -17,25 +17,25 @@ const BOOT_STEPS: BootStep[] = [
   {
     id: 'db',
     code: '01',
-    label: 'MOUNTING INDEXEDDB SNAPSHOT STORE',
+    label: 'LOADING SAVED ASTRONAUT HEALTH DATA',
     threshold: 25,
   },
   {
     id: 'hrp',
     code: '02',
-    label: 'CALIBRATING NASA HRP 5-HAZARDS ENGINE',
+    label: 'STARTING NASA SPACE HEALTH RULES',
     threshold: 55,
   },
   {
     id: 'cad',
     code: '03',
-    label: 'INITIALIZING CAD BIOMEDICAL SCHEMATIC',
+    label: 'PREPARING INTERACTIVE BODY MAP',
     threshold: 80,
   },
   {
     id: 'surgeon',
     code: '04',
-    label: 'LINKING FLIGHT SURGEON DECISION SUPPORT',
+    label: 'CONNECTING FLIGHT SURGEON GUIDE',
     threshold: 100,
   },
 ];
@@ -115,11 +115,11 @@ export const BootLoadingScreen: React.FC<BootLoadingScreenProps> = ({
           <div className="flex items-center gap-2 min-w-0">
             <Activity className="h-3.5 w-3.5 text-[#2B7FFF] shrink-0" aria-hidden="true" />
             <span className="flight-micro-label text-white truncate">
-              Astro FIT // Flight-Deck Telemetry Boot
+              Astro FIT // Starting Health Monitor
             </span>
           </div>
           <span className="font-mono-tabular text-[10px] font-semibold text-[#2B7FFF] shrink-0">
-            SEQ HRP-INIT
+            SYSTEM STARTUP
           </span>
         </div>
 
@@ -159,7 +159,7 @@ export const BootLoadingScreen: React.FC<BootLoadingScreenProps> = ({
                 Astro FIT
               </h1>
               <p className="mt-1 font-mono-tabular text-[11px] uppercase tracking-[0.08em] text-[#8E96AA]">
-                Autonomous Deep-Space Biomedical Telemetry Console
+                Astronaut Health &amp; Space Safety Monitor
               </p>
             </div>
           </div>
@@ -210,7 +210,7 @@ export const BootLoadingScreen: React.FC<BootLoadingScreenProps> = ({
           {/* Progress Bar & Bypass Action */}
           <div className="mt-4 space-y-2">
             <div className="flex items-center justify-between gap-2 font-mono-tabular text-[11px]">
-              <span className="flight-micro-label">Telemetry Initialization</span>
+              <span className="flight-micro-label">Loading Progress</span>
               <span className="font-semibold text-white">{progress}%</span>
             </div>
 
@@ -229,14 +229,14 @@ export const BootLoadingScreen: React.FC<BootLoadingScreenProps> = ({
 
             <div className="flex items-center justify-between pt-1">
               <span className="font-mono-tabular text-[10px] text-[#8E96AA]">
-                NASA HRP 5-HAZARDS // OFFLINE PWA READY
+                NASA 5 SPACE HAZARDS // WORKS OFFLINE
               </span>
               <button
                 type="button"
                 onClick={handleBypass}
                 className="inline-flex items-center gap-1 rounded-[4px] border border-[#232734] bg-[#0D0F15] px-2.5 py-1 font-mono-tabular text-[10px] font-medium text-[#8E96AA] hover:border-[#2B7FFF] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#2B7FFF]"
               >
-                <span>ENTER CONSOLE</span>
+                <span>OPEN DASHBOARD</span>
                 <ChevronRight className="h-3 w-3" aria-hidden="true" />
               </button>
             </div>

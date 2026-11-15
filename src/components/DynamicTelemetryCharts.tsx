@@ -228,9 +228,9 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
     <section className="rounded-[6px] border border-[#232734] bg-[#11131A] p-3.5 sm:p-4 space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#232734] pb-2.5">
         <div>
-          <div className="flight-micro-label">Oscilloscope Telemetry · 14d + 5d Horizon</div>
+          <div className="flight-micro-label">14-Day History + 5-Day Forecast</div>
           <h2 className="mt-0.5 text-sm font-semibold text-white">
-            Biomedical Time-Series &amp; Limit Forecast
+            Health Trends &amp; Early Warnings
           </h2>
         </div>
         {selectedDayIndex !== null ? (
@@ -239,11 +239,11 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
             onClick={() => onSelectDay(null)}
             className="rounded-[4px] border border-[#F59E0B] bg-[#F59E0B]/10 px-2 py-1 text-[11px] font-mono-tabular font-medium text-[#F59E0B] hover:bg-[#F59E0B]/20 whitespace-nowrap"
           >
-            RETURN TO LIVE
+            BACK TO LIVE
           </button>
         ) : (
           <span className="font-mono-tabular text-[11px] text-[#8E96AA]">
-            {activePoint.missionDayLabel} (+5D PROJ)
+            {activePoint.missionDayLabel} (+5D FORECAST)
           </span>
         )}
       </div>
@@ -253,19 +253,19 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 flight-micro-label">
             <TrendingUp className="h-3.5 w-3.5 text-[#2B7FFF]" aria-hidden="true" />
-            <span>Predictive Trajectory Alerts ({trajectory.horizonDays}d)</span>
+            <span>Early Warning Forecast (Next {trajectory.horizonDays} Days)</span>
           </div>
           <span className="font-mono-tabular text-[10px] text-[#8E96AA]">
             {trajectory.alerts.length === 0
-              ? '0 VIOLATIONS PROJECTED'
-              : `${trajectory.alerts.length} ALERT${trajectory.alerts.length > 1 ? 'S' : ''}`}
+              ? 'NO RISKS EXPECTED'
+              : `${trajectory.alerts.length} WARNING${trajectory.alerts.length > 1 ? 'S' : ''}`}
           </span>
         </div>
 
         {trajectory.alerts.length === 0 ? (
           <div className="mt-2 flex items-center gap-2 text-xs text-[#10B981]">
             <CheckCircle2 className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            <span>● Trajectory within {environment.shortName} safe operating bounds (+5d).</span>
+            <span>● Trends stay within safe {environment.shortName} limits over the next 5 days.</span>
           </div>
         ) : (
           <ul className="mt-2 space-y-1.5">
@@ -313,7 +313,7 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
       {/* 1. Cardiovascular Oscilloscope Plot */}
       <div className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-2.5">
         <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5">
-          <span className="flight-micro-label">CH-01 // CARDIOVASCULAR (HR &amp; SYS BP)</span>
+          <span className="flight-micro-label">HEART RATE &amp; BLOOD PRESSURE</span>
           <span className="font-mono-tabular text-[11px] font-semibold text-white">
             {activePoint.readings.heartRate} bpm · {activePoint.readings.systolicBP}/{activePoint.readings.diastolicBP} mmHg
           </span>
@@ -322,13 +322,13 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
           viewBox={`0 0 ${width} ${height}`}
           className="mt-1.5 h-28 sm:h-24 w-full cursor-crosshair select-none"
           role="img"
-          aria-label="14-day cardiovascular oscilloscope trace with 5-day forecast"
+          aria-label="14-day heart rate and blood pressure chart with 5-day forecast"
         >
           {renderGridlines()}
           <rect x={forecastBoundaryX} y={padT} width={forecastWidth} height={plotH} fill="#141824" fillOpacity="0.65" />
           <line x1={forecastBoundaryX} y1={padT} x2={forecastBoundaryX} y2={padT + plotH} stroke="#3B4254" strokeDasharray="2 2" />
           <text x={forecastBoundaryX + 4} y={padT + 10} className="fill-[#8E96AA] text-[9px]" style={{ fontFamily: 'var(--font-mono)' }}>
-            +5D PROJ
+            +5D FORECAST
           </text>
 
           {/* Safe Nominal Band */}
@@ -389,7 +389,7 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
       {/* 2. Radiation Exposure Oscilloscope Plot */}
       <div className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-2.5">
         <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5">
-          <span className="flight-micro-label">CH-02 // CUMULATIVE DOSIMETRY</span>
+          <span className="flight-micro-label">TOTAL RADIATION EXPOSURE</span>
           <span className="font-mono-tabular text-[11px] font-semibold text-white">
             {activePoint.readings.cumulativeRadiation.toFixed(1)} / {radCautionMax} mSv
           </span>
@@ -398,13 +398,13 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
           viewBox={`0 0 ${width} ${height}`}
           className="mt-1.5 h-28 sm:h-24 w-full cursor-crosshair select-none"
           role="img"
-          aria-label="14-day cumulative radiation exposure oscilloscope plot"
+          aria-label="14-day total radiation exposure chart"
         >
           {renderGridlines()}
           <rect x={forecastBoundaryX} y={padT} width={forecastWidth} height={plotH} fill="#141824" fillOpacity="0.65" />
           <line x1={forecastBoundaryX} y1={padT} x2={forecastBoundaryX} y2={padT + plotH} stroke="#3B4254" strokeDasharray="2 2" />
           <text x={forecastBoundaryX + 4} y={padT + 10} className="fill-[#8E96AA] text-[9px]" style={{ fontFamily: 'var(--font-mono)' }}>
-            +5D PROJ
+            +5D FORECAST
           </text>
 
           <rect
@@ -458,15 +458,15 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
           </text>
         </svg>
         <div className="mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 text-[10px] text-[#8E96AA] font-mono-tabular">
-          <span>Safe &le;{radNominalMax} mSv · ┄ +5d Trajectory</span>
-          <span>D+5 est: {radForecast.projectedSeries[radForecast.projectedSeries.length - 1].toFixed(1)} mSv</span>
+          <span>Safe &le;{radNominalMax} mSv · ┄ 5-Day Forecast</span>
+          <span>5-day est: {radForecast.projectedSeries[radForecast.projectedSeries.length - 1].toFixed(1)} mSv</span>
         </div>
       </div>
 
       {/* 3. Sleep & Behavioral Mood Plot */}
       <div className="rounded-[4px] border border-[#232734] bg-[#0D0F15] p-2.5">
         <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5">
-          <span className="flight-micro-label">CH-03 // CIRCADIAN SLEEP &amp; COGNITIVE</span>
+          <span className="flight-micro-label">SLEEP &amp; FOCUS SCORE</span>
           <span className="font-mono-tabular text-[11px] font-semibold text-white">
             {activePoint.readings.sleepHours.toFixed(1)} hrs · {activePoint.readings.moodCognitiveScore.toFixed(1)}/10
           </span>
@@ -475,13 +475,13 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
           viewBox={`0 0 ${width} ${height}`}
           className="mt-1.5 h-28 sm:h-24 w-full cursor-crosshair select-none"
           role="img"
-          aria-label="14-day sleep duration and behavioral mood oscilloscope plot"
+          aria-label="14-day sleep and mood focus chart"
         >
           {renderGridlines()}
           <rect x={forecastBoundaryX} y={padT} width={forecastWidth} height={plotH} fill="#141824" fillOpacity="0.65" />
           <line x1={forecastBoundaryX} y1={padT} x2={forecastBoundaryX} y2={padT + plotH} stroke="#3B4254" strokeDasharray="2 2" />
           <text x={forecastBoundaryX + 4} y={padT + 10} className="fill-[#8E96AA] text-[9px]" style={{ fontFamily: 'var(--font-mono)' }}>
-            +5D PROJ
+            +5D FORECAST
           </text>
 
           <rect
@@ -532,8 +532,8 @@ export const DynamicTelemetryCharts: React.FC<DynamicTelemetryChartsProps> = ({
           </text>
         </svg>
         <div className="mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 text-[10px] text-[#8E96AA] font-mono-tabular">
-          <span>━ Sleep (hrs) · ┈ Mood/Cog · ┄ +5d Sleep</span>
-          <span>D+5 est: {sleepForecast.projectedSeries[sleepForecast.projectedSeries.length - 1].toFixed(1)} hrs</span>
+          <span>━ Sleep (hrs) · ┈ Focus · ┄ 5-Day Sleep Forecast</span>
+          <span>5-day est: {sleepForecast.projectedSeries[sleepForecast.projectedSeries.length - 1].toFixed(1)} hrs</span>
         </div>
       </div>
     </section>
